@@ -1,0 +1,76 @@
+@theme {
+  /* ── Typography ── */
+  --font-sans: 'Söhne', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+
+  /* ── Colors ── */
+  --color-bg: #ffffff;
+  --color-surface: #f5f6f8;
+  --color-surface-hover: #eef0f3;
+  --color-card: #ffffff;
+  --color-input-bg: #f9fafb;
+
+  --color-border: #d1d5db;
+  --color-border-light: #e8eaed;
+
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-text-dim: #9ca3af;
+
+  --color-accent: #111827;
+  --color-accent-soft: #374151;
+  --color-accent-bg: #f0f1f3;
+
+  --color-danger: #ef4444;
+  --color-danger-bg: #fef2f2;
+  --color-success: #10b981;
+  --color-success-bg: #ecfdf5;
+  --color-warning-bg: #fffbeb;
+
+  --color-blue: #3b82f6;
+  --color-blue-bg: #eff6ff;
+  --color-green: #059669;
+  --color-green-bg: #ecfdf5;
+
+  --color-highlight: #dbeafe;
+
+  /* ── Status colors ── */
+  --color-status-new: #94a3b8;
+  --color-status-learning: #f59e0b;
+  --color-status-active: #10b981;
+  --color-status-mastered: #3b82f6;
+  --color-status-review: #ef4444;
+
+  /* ── Spacing scale ── */
+  --spacing-section: 44px;
+  --spacing-card: 28px;
+
+  /* ── Radius ── */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 32px 100px rgba(0, 0, 0, 0.22);
+  --shadow-btn: 0 6px 24px rgba(0, 0, 0, 0.14);
+}
+
+/* ── Base resets ── */
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
