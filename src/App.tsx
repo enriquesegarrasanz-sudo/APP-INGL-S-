@@ -24,6 +24,8 @@ export default function App() {
   const [filterContext, setFilterContext] = useState('');
   const [search, setSearch] = useState('');
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'all' | 'grouped'>('all');
+  const [activeBlock, setActiveBlock] = useState<string | null>(null);
 
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
@@ -77,6 +79,24 @@ export default function App() {
     setToast('Expresion guardada');
   }, [expressions, addExpression, updateExpression]);
 
+  const handleNavigateToBlock = useCallback((blockLabel: string) => {
+    setView('library');
+    setViewMode('grouped');
+    setActiveBlock(blockLabel);
+    setFilterBlock(blockLabel);
+    setExpandedCard(null);
+  }, []);
+
+  const handleNavigateToExpression = useCallback((id: string) => {
+    setExpandedCard(id);
+    window.setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }, 50);
+  }, []);
+
   return (
     <div className="min-h-screen bg-bg text-text font-sans">
       {toast && <Toast message={toast} onClose={() => setToast('')} />}
@@ -84,7 +104,12 @@ export default function App() {
       <Header currentView={view} onViewChange={setView} />
 
       <main className="px-4 sm:px-6 md:px-10 py-6 md:py-10 max-w-[1280px] mx-auto">
-        {view === 'themes' && <ThemesView expressions={expressions} />}
+        {view === 'themes' && (
+          <ThemesView
+            expressions={expressions}
+            onNavigateToBlock={handleNavigateToBlock}
+          />
+        )}
 
         {view === 'library' && (
           <LibraryView
@@ -112,6 +137,10 @@ export default function App() {
             onQuickAdd={() => setShowQuickAdd(true)}
             onDelete={deleteExpression}
             onStatusChange={(id, status) => updateStatus(id, status as ExpressionStatus)}
+            viewMode={viewMode}
+            setViewMode={setViewMode}
+            activeBlock={activeBlock}
+            onNavigateToExpression={handleNavigateToExpression}
           />
         )}
 

@@ -1,21 +1,27 @@
 # CHANGES.log
 
-## 2026-05-24 — Navegación temática y limpieza de vistas legacy
+## 2026-05-24 - Vista de temas y biblioteca por bloques
+- Implemented the Themes grid with block progress, priority badges, and navigation into filtered library sections.
+- Added flat/grouped library modes, thematic section headers, multi-block expression tags, and related-expression navigation.
+- Branch: feat/reestructura-tematica
+- Status: Build, lint, and browser flow verification passing.
+
+## 2026-05-24 - Navegacion tematica y limpieza de vistas legacy
 - Reworked the main navigation to the 5 new views: themes, library, pronunciation, flashcards, and settings.
 - Removed legacy scripts/practice files and stripped script storage/types from the shared app model.
 - Added placeholder ThemesView and SettingsView, and cleaned DataView to match the new data shape.
 - Branch: feat/reestructura-tematica
 - Status: Build and lint passing; dev server checked on http://127.0.0.1:4173.
 
-## 2026-05-24 — Seed dataset reestructura tematica
+## 2026-05-24 - Seed dataset reestructura tematica
 - Replaced mock seed data with 173 Enrike-specific expressions across the 10 thematic blocks.
 - Removed parallel script seed export and adjusted storage fallback for scripts to an empty list.
 - Fixed the editor lint issue caused by synchronous state reset in an effect.
 - Branch: feat/reestructura-tematica
 - Status: Build, lint and dataset validation passing.
 
-## 2026-05-23 — Initial setup
-- Created project: Vite + React + TypeScript + Tailwind CSS v4
+## 2026-05-23 - Initial setup
+- Created project: Vite + React + TypeScript
 - Branch: feature/sparring-v2
 - Storage: Google Sheets via Apps Script (pending setup)
 - AI: DeepSeek API + Ollama (pending API keys)
