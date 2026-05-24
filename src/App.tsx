@@ -3,14 +3,15 @@ import type { ExpressionStatus, Expression } from './types';
 
 import { useExpressions } from './hooks/useExpressions';
 import { useReview } from './hooks/useReview';
+import { AudioSettingsProvider } from './context/AudioSettingsContext';
 
 import Header from './components/layout/Header';
 import Toast from './components/ui/Toast';
 import ThemesView from './components/themes/ThemesView';
+import PersonalMapView from './components/map/PersonalMapView';
 import LibraryView from './components/library/LibraryView';
 import QuickAddModal from './components/library/QuickAddModal';
 import ExpressionEditor from './components/library/ExpressionEditor';
-import PronunciationView from './components/pronunciation/PronunciationView';
 import FlashcardView from './components/flashcards/FlashcardView';
 import SettingsView from './components/settings/SettingsView';
 
@@ -98,6 +99,7 @@ export default function App() {
   }, []);
 
   return (
+    <AudioSettingsProvider>
     <div className="min-h-screen bg-bg text-text font-sans">
       {toast && <Toast message={toast} onClose={() => setToast('')} />}
 
@@ -110,6 +112,8 @@ export default function App() {
             onNavigateToBlock={handleNavigateToBlock}
           />
         )}
+
+        {view === 'map' && <PersonalMapView />}
 
         {view === 'library' && (
           <LibraryView
@@ -143,8 +147,6 @@ export default function App() {
             onNavigateToExpression={handleNavigateToExpression}
           />
         )}
-
-        {view === 'pronunciation' && <PronunciationView expressions={expressions} />}
 
         {view === 'flashcards' && (
           <FlashcardView
@@ -188,5 +190,6 @@ export default function App() {
         />
       )}
     </div>
+    </AudioSettingsProvider>
   );
 }

@@ -1,6 +1,6 @@
 import type { Expression, ExpressionStatus } from '../../types';
 import { STATUSES, STATUS_LABELS, STATUS_COLORS } from '../../types';
-import AudioButton from '../ui/AudioButton';
+import SpeakableText from '../ui/SpeakableText';
 import Tag from '../ui/Tag';
 
 interface ExpressionCardProps {
@@ -58,9 +58,15 @@ export default function ExpressionCard({
         />
 
         <div className="flex-1 min-w-0">
-          <span className="text-sm sm:text-lg font-bold text-text block truncate leading-snug">
-            {expr.english}
-          </span>
+          <SpeakableText
+            text={expr.english}
+            pronunciation={expr.pronunciation_es}
+            stress={expr.stress}
+            note={expr.pronunciation_note}
+            showGuide={false}
+            className="min-w-0"
+            phraseClassName="block max-w-full truncate text-sm sm:text-lg font-bold text-text leading-snug"
+          />
           <span className="text-xs sm:text-sm text-text-muted block truncate leading-tight">
             {expr.spanish_source}
           </span>
@@ -74,10 +80,6 @@ export default function ExpressionCard({
 
         <span className="text-xs font-semibold px-3 py-1 rounded-full bg-surface text-text-muted hidden lg:inline shrink-0">
           {STATUS_LABELS[expr.status]}
-        </span>
-
-        <span className="shrink-0" onClick={(event) => event.stopPropagation()}>
-          <AudioButton text={expr.english} size="sm" />
         </span>
 
         <svg
@@ -116,12 +118,14 @@ export default function ExpressionCard({
               <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">
                 Pronunciacion
               </p>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-text font-mono">
-                  {expr.pronunciation_es}
-                </span>
-                <AudioButton text={expr.english} size="sm" />
-              </div>
+              <SpeakableText
+                text={expr.english}
+                pronunciation={expr.pronunciation_es}
+                stress={expr.stress}
+                note={expr.pronunciation_note}
+                showWords
+                phraseClassName="text-sm sm:text-base font-bold text-text"
+              />
             </div>
 
             <div>
@@ -149,8 +153,11 @@ export default function ExpressionCard({
               <ul className="space-y-2">
                 {expr.examples.map((example, index) => (
                   <li key={index} className="flex items-center gap-3">
-                    <span className="text-sm text-text">{example}</span>
-                    <AudioButton text={example} size="sm" />
+                    <SpeakableText
+                      text={example}
+                      showWords
+                      phraseClassName="text-sm text-text"
+                    />
                   </li>
                 ))}
               </ul>
@@ -173,9 +180,11 @@ export default function ExpressionCard({
               </p>
               <div className="flex flex-wrap gap-2">
                 {expr.better_alternatives.map((alternative, index) => (
-                  <span key={index} className="text-sm font-semibold text-green">
-                    {alternative}
-                  </span>
+                  <SpeakableText
+                    key={index}
+                    text={alternative}
+                    phraseClassName="text-sm font-semibold text-green"
+                  />
                 ))}
               </div>
             </div>

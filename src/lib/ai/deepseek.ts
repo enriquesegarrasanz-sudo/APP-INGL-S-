@@ -30,11 +30,11 @@ export class DeepSeekProvider implements AIProvider {
 
   async available(): Promise<boolean> {
     const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY;
-    return !!apiKey;
+    return typeof apiKey === 'string' && apiKey.trim().length > 0;
   }
 
   async autoFill(englishExpression: string): Promise<AIAutoFillResult | null> {
-    const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY;
+    const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY?.trim();
     if (!apiKey) {
       console.warn('[DeepSeek] No API key found in VITE_DEEPSEEK_API_KEY');
       return null;

@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import type { TTSSpeed } from '../../types';
 import { TTS_SPEEDS } from '../../types';
 import { speak, stopSpeaking } from '../../lib/tts';
+import { useAudioSettings } from '../../context/audioSettings';
 
 interface AudioButtonProps {
   text: string;
@@ -17,8 +18,8 @@ const SIZES = {
 
 export default function AudioButton({ text, size = 'md', showSpeedControl = false }: AudioButtonProps) {
   const [playing, setPlaying] = useState(false);
-  const [speed, setSpeed] = useState<TTSSpeed>('normal');
   const [showSpeeds, setShowSpeeds] = useState(false);
+  const { speed, setSpeed } = useAudioSettings();
   const s = SIZES[size];
 
   const handlePlay = useCallback(
@@ -38,8 +39,10 @@ export default function AudioButton({ text, size = 'md', showSpeedControl = fals
   return (
     <div className="relative flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
       <button
+        type="button"
         onClick={handlePlay}
         title={playing ? 'Detener' : `Escuchar (${TTS_SPEEDS[speed].label})`}
+        aria-label={playing ? 'Detener audio' : `Escuchar ${text}`}
         className={`${s.btn} flex items-center justify-center rounded-full border-2 shrink-0 transition-all duration-200 cursor-pointer ${
           playing
             ? 'bg-accent text-white border-accent scale-110 shadow-lg'
@@ -65,6 +68,7 @@ export default function AudioButton({ text, size = 'md', showSpeedControl = fals
       {showSpeedControl && (
         <div className="relative">
           <button
+            type="button"
             onClick={(e) => { e.stopPropagation(); setShowSpeeds(!showSpeeds); }}
             className="px-3 py-1.5 text-xs font-bold text-text-muted bg-surface border border-border-light rounded-lg hover:border-accent cursor-pointer"
           >
@@ -75,6 +79,7 @@ export default function AudioButton({ text, size = 'md', showSpeedControl = fals
               {(Object.keys(TTS_SPEEDS) as TTSSpeed[]).map((key) => (
                 <button
                   key={key}
+                  type="button"
                   onClick={(e) => { e.stopPropagation(); setSpeed(key); setShowSpeeds(false); }}
                   className={`w-full px-4 py-2 text-left text-sm cursor-pointer hover:bg-surface ${
                     speed === key ? 'font-bold text-accent bg-accent-bg' : 'text-text-muted'

@@ -3,6 +3,15 @@ import type { AIProvider, AIAutoFillResult } from '../../types';
 const DEFAULT_OLLAMA_URL = 'http://localhost:11434';
 const DEFAULT_MODEL = 'deepseek-r1:8b';
 
+interface OllamaModel {
+  name?: string;
+  model?: string;
+}
+
+interface OllamaTagsResponse {
+  models?: OllamaModel[];
+}
+
 function buildPrompt(englishExpr: string): string {
   return `You are an English-Spanish language expert helping a native Spanish speaker learn natural English expressions.
 
@@ -36,19 +45,45 @@ export class OllamaProvider implements AIProvider {
     return import.meta.env.VITE_OLLAMA_MODEL || DEFAULT_MODEL;
   }
 
-  async available(): Promise<boolean> {
+  private async getAvailableModels(): Promise<string[]> {
     try {
-      const response = await fetch(this.baseUrl, {
+      const response = await fetch(`${this.baseUrl}/api/tags`, {
         method: 'GET',
         signal: AbortSignal.timeout(3000),
       });
-      return response.ok;
+
+      if (!response.ok) return [];
+
+      const data = await response.json() as OllamaTagsResponse;
+      return (data.models ?? [])
+        .map((model) => model.name ?? model.model)
+        .filter((model): model is string => Boolean(model));
     } catch {
-      return false;
+      return [];
     }
   }
 
+  private async getModelForRequest(): Promise<string | null> {
+    const models = await this.getAvailableModels();
+    if (models.length === 0) return null;
+
+    if (models.includes(this.model)) return this.model;
+
+    const textModel = models.find((model) => !model.toLowerCase().includes('vl'));
+    return textModel ?? models[0];
+  }
+
+  async available(): Promise<boolean> {
+    return (await this.getAvailableModels()).length > 0;
+  }
+
   async autoFill(englishExpression: string): Promise<AIAutoFillResult | null> {
+    const model = await this.getModelForRequest();
+    if (!model) {
+      console.warn('[Ollama] No local models available');
+      return null;
+    }
+
     try {
       const response = await fetch(`${this.baseUrl}/api/chat`, {
         method: 'POST',
@@ -56,7 +91,7 @@ export class OllamaProvider implements AIProvider {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: this.model,
+          model,
           messages: [
             {
               role: 'system',

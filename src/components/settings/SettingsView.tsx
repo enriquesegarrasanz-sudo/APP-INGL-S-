@@ -5,6 +5,7 @@ import { useAIPreference, type AIServiceStatus, type AIPreference } from '../../
 import { downloadFile, formatDate } from '../../lib/utils';
 import {
   exportAllData,
+  getCloudSyncStatus,
   getLastSyncTime,
   isCloudConfigured,
   syncFromCloud,
@@ -25,12 +26,12 @@ const AI_OPTIONS: { value: AIPreference; title: string; description: string }[] 
   {
     value: 'ollama',
     title: 'Local (Ollama)',
-    description: 'Usa solo el modelo local.',
+    description: 'Usa Ollama en este ordenador.',
   },
   {
     value: 'deepseek',
     title: 'DeepSeek (Cloud)',
-    description: 'Usa solo DeepSeek con API key.',
+    description: 'Usa la API de DeepSeek configurada.',
   },
 ];
 
@@ -47,6 +48,7 @@ export default function SettingsView({
   const learningCount = expressions.filter((expression) => expression.status === 'learning').length;
   const masteredCount = expressions.filter((expression) => expression.status === 'mastered').length;
   const cloudConfigured = isCloudConfigured();
+  const cloudSyncStatus = getCloudSyncStatus();
   const lastSync = getLastSyncTime();
 
   const handleExportJson = () => {
@@ -117,8 +119,8 @@ export default function SettingsView({
           <div className="flex flex-col gap-2 mb-5">
             <h3 className="text-lg font-bold m-0">Inteligencia Artificial</h3>
             <div className="flex flex-wrap gap-4">
-              <ServiceStatus label="Ollama" status={ollamaStatus} availableText="Conectado" unavailableText="No disponible" />
-              <ServiceStatus label="DeepSeek" status={deepseekStatus} availableText="Configurado" unavailableText="Sin API key" />
+              <ServiceStatus label="Ollama" status={ollamaStatus} availableText="Conectado" unavailableText="Sin conexión local" />
+              <ServiceStatus label="DeepSeek" status={deepseekStatus} availableText="API conectada" unavailableText="API key no cargada" />
             </div>
           </div>
 
@@ -162,11 +164,18 @@ export default function SettingsView({
                 {syncing ? 'Sincronizando...' : 'Sincronizar ahora'}
               </button>
             </div>
+          ) : cloudSyncStatus === 'configured-disabled' ? (
+            <div className="flex items-start gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-text-dim inline-block mt-1.5" />
+              <span className="text-sm text-text-muted leading-relaxed">
+                Copia local activa. Google Sheets está configurado, pero la sincronización queda desactivada hasta cerrar la implementación.
+              </span>
+            </div>
           ) : (
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-text-dim inline-block" />
               <span className="text-sm text-text-muted">
-                Google Apps Script no configurado. Define <code className="text-xs bg-surface px-2 py-0.5 rounded">VITE_GOOGLE_SCRIPT_URL</code> para activar.
+                Google Sheets pendiente. Define <code className="text-xs bg-surface px-2 py-0.5 rounded">VITE_GOOGLE_SCRIPT_URL</code> cuando la sincronización esté lista.
               </span>
             </div>
           )}

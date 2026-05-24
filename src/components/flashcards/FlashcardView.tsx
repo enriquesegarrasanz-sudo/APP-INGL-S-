@@ -3,7 +3,7 @@ import type { Expression, ReviewSession } from '../../types';
 import { THEME_BLOCKS } from '../../types';
 import type { ReviewQuality } from '../../types';
 import { QUALITY_LABELS } from '../../lib/spaced-repetition';
-import AudioButton from '../ui/AudioButton';
+import SpeakableText from '../ui/SpeakableText';
 
 interface FlashcardViewProps {
   getDueCountForBlock: (blockFilter: string | null) => number;
@@ -125,9 +125,15 @@ export default function FlashcardView({
               <p className="text-text-muted text-lg mb-2">
                 {currentCard.spanish_source}
               </p>
-              <h2 className="text-3xl font-black mb-4 leading-snug">
-                {currentCard.english}
-              </h2>
+              <SpeakableText
+                text={currentCard.english}
+                pronunciation={currentCard.pronunciation_es}
+                stress={currentCard.stress}
+                note={currentCard.pronunciation_note}
+                showWords
+                className="mb-6"
+                phraseClassName="text-3xl font-black leading-snug"
+              />
 
               {/* Pronunciation details */}
               <div className="flex flex-col items-center gap-2 mb-6">
@@ -137,9 +143,6 @@ export default function FlashcardView({
                 <span className="text-2xl font-black tracking-wide">
                   {currentCard.stress}
                 </span>
-                <div className="mt-1">
-                  <AudioButton text={currentCard.english} size="md" showSpeedControl />
-                </div>
               </div>
             </>
           )}

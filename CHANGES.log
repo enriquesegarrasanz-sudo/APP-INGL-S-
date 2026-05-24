@@ -1,5 +1,26 @@
 # CHANGES.log
 
+## 2026-05-25 - Pronunciacion transversal
+- Removed the dedicated Pronunciacion navigation mode and moved TTS speed plus chuleta controls into the global header.
+- Added reusable speakable text for expressions so full phrases and individual words can be played from Biblioteca and Repaso.
+- Added contextual pronunciation hints under active phrases/words when the chuleta toggle is enabled.
+- Branch: main
+- Status: Build, lint, and browser verification passing.
+
+## 2026-05-25 - Estado real de IA y Google
+- Fixed Ollama detection to use the local `/api/tags` endpoint and pick an installed model when the default is unavailable.
+- Tightened DeepSeek API key detection and updated Settings copy so IA shows real connected states.
+- Disabled Google Sheets sync unless explicitly enabled, leaving the UI as local backup active while cloud sync is pending implementation.
+- Branch: main
+- Status: Build, lint, and browser Settings verification passing.
+
+## 2026-05-25 - Mapa personal del perfil linguistico
+- Added a dedicated Mapa view that exposes the conversation analysis behind the vocabulary structure.
+- Structured Enrike's communication profile, priority language functions, themes, literal translation traps, registers, and practice design in `src/data/personalMap.ts`.
+- Split the audio settings hook out of the provider file so ESLint Fast Refresh rules pass.
+- Branch: main
+- Status: Build, lint, and local dev server smoke check passing.
+
 ## 2026-05-24 - Verificacion final de reestructura tematica
 - Ran global QA for phases F01-F05: build, lint, dataset integrity, migration, deleted-file checks, and browser verification.
 - Fixed review sessions so Repaso uses the current expression state after status/theme changes.

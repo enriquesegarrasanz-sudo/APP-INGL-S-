@@ -58,9 +58,10 @@ function saveLocal<T>(key: string, value: T): void {
 // ── Google Sheets via Apps Script (persistent cloud) ──
 
 const SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || '';
+const GOOGLE_SYNC_ENABLED = import.meta.env.VITE_ENABLE_GOOGLE_SYNC === 'true';
 
 async function cloudLoad(): Promise<AppData | null> {
-  if (!SCRIPT_URL) return null;
+  if (!GOOGLE_SYNC_ENABLED || !SCRIPT_URL) return null;
   try {
     const res = await fetch(`${SCRIPT_URL}?action=load`, { method: 'GET' });
     if (!res.ok) return null;
@@ -72,7 +73,7 @@ async function cloudLoad(): Promise<AppData | null> {
 }
 
 async function cloudSave(data: AppData): Promise<boolean> {
-  if (!SCRIPT_URL) return false;
+  if (!GOOGLE_SYNC_ENABLED || !SCRIPT_URL) return false;
   try {
     const res = await fetch(SCRIPT_URL, {
       method: 'POST',
@@ -113,6 +114,7 @@ export function saveReviews(reviews: ReviewSession[]): void {
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
 
 function debouncedCloudSync(): void {
+  if (!GOOGLE_SYNC_ENABLED || !SCRIPT_URL) return;
   if (syncTimer) clearTimeout(syncTimer);
   syncTimer = setTimeout(() => syncToCloud(), 3000);
 }
@@ -144,7 +146,13 @@ export function getLastSyncTime(): string | null {
 }
 
 export function isCloudConfigured(): boolean {
-  return !!SCRIPT_URL;
+  return GOOGLE_SYNC_ENABLED && !!SCRIPT_URL;
+}
+
+export function getCloudSyncStatus(): 'ready' | 'configured-disabled' | 'missing-config' {
+  if (!SCRIPT_URL) return 'missing-config';
+  if (!GOOGLE_SYNC_ENABLED) return 'configured-disabled';
+  return 'ready';
 }
 
 // ── Export / Import ──
