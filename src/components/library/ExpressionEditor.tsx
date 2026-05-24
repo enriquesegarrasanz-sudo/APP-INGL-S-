@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { Expression, ExpressionStatus } from '../../types';
 import { BLOCKS, STATUSES, STATUS_LABELS } from '../../types';
 import Modal from '../ui/Modal';
@@ -48,10 +48,6 @@ export default function ExpressionEditor({
   const [form, setForm] = useState<Expression>(
     expression ?? createBlankExpression()
   );
-
-  useEffect(() => {
-    setForm(expression ?? createBlankExpression());
-  }, [expression]);
 
   const update = <K extends keyof Expression>(key: K, value: Expression[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));

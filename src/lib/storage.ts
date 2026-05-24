@@ -1,5 +1,5 @@
 import type { AppData, Expression, ParallelScript, ReviewSession } from '../types';
-import { INITIAL_EXPRESSIONS, INITIAL_SCRIPTS } from '../data/mockData';
+import { INITIAL_EXPRESSIONS } from '../data/mockData';
 
 const OLD_BLOCK_MAP: Record<string, string> = {
   'Ideas in development': 'Ideas & Creativity',
@@ -101,7 +101,7 @@ export function saveExpressions(expressions: Expression[]): void {
 }
 
 export function loadScripts(): ParallelScript[] {
-  return loadLocal(STORAGE_KEYS.scripts, INITIAL_SCRIPTS);
+  return loadLocal(STORAGE_KEYS.scripts, []);
 }
 
 export function saveScripts(scripts: ParallelScript[]): void {

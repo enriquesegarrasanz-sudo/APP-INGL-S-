@@ -1,0 +1,16 @@
+# CHANGES.log
+
+## 2026-05-24 — Seed dataset reestructura tematica
+- Replaced mock seed data with 173 Enrike-specific expressions across the 10 thematic blocks.
+- Removed parallel script seed export and adjusted storage fallback for scripts to an empty list.
+- Fixed the editor lint issue caused by synchronous state reset in an effect.
+- Branch: feat/reestructura-tematica
+- Status: Build, lint and dataset validation passing.
+
+## 2026-05-23 — Initial setup
+- Created project: Vite + React + TypeScript + Tailwind CSS v4
+- Branch: feature/sparring-v2
+- Storage: Google Sheets via Apps Script (pending setup)
+- AI: DeepSeek API + Ollama (pending API keys)
+- Base documents created: CLAUDE.md, BRIEF.md, AGENTS.md
+- Status: Project structure ready, core implementation pending
