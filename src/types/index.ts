@@ -28,21 +28,6 @@ export interface Expression {
   created_at: string;
 }
 
-export interface ScriptBlock {
-  spanish: string;
-  english: string;
-  pronunciation: string;
-  key_expressions: string[];
-  mistakes_to_avoid: string[];
-}
-
-export interface ParallelScript {
-  id: string;
-  title: string;
-  blocks: ScriptBlock[];
-  created_at: string;
-}
-
 export interface ReviewSession {
   id: string;
   started_at: string;
@@ -85,7 +70,6 @@ export type TTSSpeed = 'slow' | 'normal' | 'fast' | 'native';
 
 export interface AppData {
   expressions: Expression[];
-  scripts: ParallelScript[];
   reviews: ReviewSession[];
 }
 

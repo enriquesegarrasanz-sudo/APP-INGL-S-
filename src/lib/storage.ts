@@ -1,4 +1,4 @@
-import type { AppData, Expression, ParallelScript, ReviewSession } from '../types';
+import type { AppData, Expression, ReviewSession } from '../types';
 import { INITIAL_EXPRESSIONS } from '../data/mockData';
 
 const OLD_BLOCK_MAP: Record<string, string> = {
@@ -32,7 +32,6 @@ export function migrateExpression(expr: Record<string, unknown>): Expression {
 
 const STORAGE_KEYS = {
   expressions: 'sparring-expressions',
-  scripts: 'sparring-scripts',
   reviews: 'sparring-reviews',
   lastSync: 'sparring-last-sync',
 } as const;
@@ -100,15 +99,6 @@ export function saveExpressions(expressions: Expression[]): void {
   debouncedCloudSync();
 }
 
-export function loadScripts(): ParallelScript[] {
-  return loadLocal(STORAGE_KEYS.scripts, []);
-}
-
-export function saveScripts(scripts: ParallelScript[]): void {
-  saveLocal(STORAGE_KEYS.scripts, scripts);
-  debouncedCloudSync();
-}
-
 export function loadReviews(): ReviewSession[] {
   return loadLocal(STORAGE_KEYS.reviews, []);
 }
@@ -130,7 +120,6 @@ function debouncedCloudSync(): void {
 async function syncToCloud(): Promise<void> {
   const data: AppData = {
     expressions: loadExpressions(),
-    scripts: loadScripts(),
     reviews: loadReviews(),
   };
   const ok = await cloudSave(data);
@@ -144,7 +133,6 @@ export async function syncFromCloud(): Promise<AppData | null> {
   if (!cloud) return null;
 
   if (cloud.expressions?.length > 0) saveLocal(STORAGE_KEYS.expressions, cloud.expressions);
-  if (cloud.scripts?.length > 0) saveLocal(STORAGE_KEYS.scripts, cloud.scripts);
   if (cloud.reviews?.length > 0) saveLocal(STORAGE_KEYS.reviews, cloud.reviews);
   saveLocal(STORAGE_KEYS.lastSync, new Date().toISOString());
 
@@ -164,14 +152,12 @@ export function isCloudConfigured(): boolean {
 export function exportAllData(): AppData {
   return {
     expressions: loadExpressions(),
-    scripts: loadScripts(),
     reviews: loadReviews(),
   };
 }
 
 export function importAllData(data: Partial<AppData>): void {
   if (data.expressions) saveLocal(STORAGE_KEYS.expressions, data.expressions);
-  if (data.scripts) saveLocal(STORAGE_KEYS.scripts, data.scripts);
   if (data.reviews) saveLocal(STORAGE_KEYS.reviews, data.reviews);
   debouncedCloudSync();
 }

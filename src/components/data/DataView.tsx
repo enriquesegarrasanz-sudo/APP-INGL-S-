@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
-import type { Expression, ParallelScript } from '../../types';
-import { STATUS_LABELS } from '../../types';
+import type { AppData, Expression } from '../../types';
+import { STATUS_LABELS, THEME_BLOCKS } from '../../types';
 import { downloadFile, formatDate } from '../../lib/utils';
 import {
   exportAllData,
@@ -11,14 +11,12 @@ import {
 
 interface DataViewProps {
   expressions: Expression[];
-  scripts: ParallelScript[];
-  onImport: (data: { expressions?: Expression[]; scripts?: ParallelScript[] }) => void;
+  onImport: (data: Partial<AppData>) => void;
   copyText: (text: string, label?: string) => void;
 }
 
 export default function DataView({
   expressions,
-  scripts,
   onImport,
   copyText,
 }: DataViewProps) {
@@ -27,7 +25,9 @@ export default function DataView({
 
   const activeCount = expressions.filter((e) => e.status === 'active').length;
   const learningCount = expressions.filter((e) => e.status === 'learning').length;
-  const blockCount = scripts.reduce((sum, s) => sum + s.blocks.length, 0);
+  const coveredBlocks = THEME_BLOCKS.filter((block) =>
+    expressions.some((expression) => expression.blocks.includes(block.label))
+  ).length;
   const cloudConfigured = isCloudConfigured();
   const lastSync = getLastSyncTime();
 
@@ -92,8 +92,11 @@ export default function DataView({
         <StatCard label="Total" value={expressions.length} />
         <StatCard label={STATUS_LABELS.active} value={activeCount} color="var(--color-status-active)" />
         <StatCard label={STATUS_LABELS.learning} value={learningCount} color="var(--color-status-learning)" />
-        <StatCard label="Scripts" value={scripts.length} />
-        <StatCard label="Bloques" value={blockCount} />
+        <StatCard label="Bloques" value={coveredBlocks} />
+        <StatCard
+          label="Pendientes"
+          value={expressions.filter((expression) => expression.status === 'new').length}
+        />
       </div>
 
       {/* Action buttons */}
@@ -174,10 +177,10 @@ export default function DataView({
             <strong>Repaso</strong> &mdash; Sistema de repetici&oacute;n espaciada SM-2 (como Anki) para memorizar a largo plazo.
           </p>
           <p className="m-0">
-            <strong>Scripts</strong> &mdash; Scripts paralelos espa&ntilde;ol/ingl&eacute;s para practicar di&aacute;logos completos.
+            <strong>Temas</strong> &mdash; Recorre tus bloques tem&aacute;ticos y detecta d&oacute;nde tienes m&aacute;s vocabulario cargado.
           </p>
           <p className="m-0">
-            <strong>Pr&aacute;ctica</strong> &mdash; Genera prompts para practicar con un AI usando tu vocabulario activo.
+            <strong>Ajustes</strong> &mdash; Centraliza sync, exportaci&oacute;n e integraciones.
           </p>
           <p className="m-0">
             <strong>Datos</strong> &mdash; Exporta, importa y sincroniza tu progreso.

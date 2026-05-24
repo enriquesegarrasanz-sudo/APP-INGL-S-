@@ -1,5 +1,12 @@
 # CHANGES.log
 
+## 2026-05-24 — Navegación temática y limpieza de vistas legacy
+- Reworked the main navigation to the 5 new views: themes, library, pronunciation, flashcards, and settings.
+- Removed legacy scripts/practice files and stripped script storage/types from the shared app model.
+- Added placeholder ThemesView and SettingsView, and cleaned DataView to match the new data shape.
+- Branch: feat/reestructura-tematica
+- Status: Build and lint passing; dev server checked on http://127.0.0.1:4173.
+
 ## 2026-05-24 — Seed dataset reestructura tematica
 - Replaced mock seed data with 173 Enrike-specific expressions across the 10 thematic blocks.
 - Removed parallel script seed export and adjusted storage fallback for scripts to an empty list.
