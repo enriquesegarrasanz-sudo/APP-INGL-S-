@@ -30,6 +30,21 @@ export function migrateExpression(expr: Record<string, unknown>): Expression {
   return migrated as unknown as Expression;
 }
 
+function mergeWithInitialExpressions(raw: Record<string, unknown>[]): Expression[] {
+  const merged = new Map<string, Expression>();
+
+  INITIAL_EXPRESSIONS.forEach((expression) => {
+    merged.set(expression.id, expression);
+  });
+
+  raw.map(migrateExpression).forEach((expression) => {
+    const baseExpression = merged.get(expression.id);
+    merged.set(expression.id, baseExpression ? { ...baseExpression, ...expression } : expression);
+  });
+
+  return [...merged.values()];
+}
+
 const STORAGE_KEYS = {
   expressions: 'sparring-expressions',
   reviews: 'sparring-reviews',
@@ -91,8 +106,7 @@ async function cloudSave(data: AppData): Promise<boolean> {
 
 export function loadExpressions(): Expression[] {
   const raw = loadLocal<Record<string, unknown>[]>(STORAGE_KEYS.expressions, []);
-  const source = raw.length > 0 ? raw : (INITIAL_EXPRESSIONS as unknown as Record<string, unknown>[]);
-  return source.map(migrateExpression);
+  return mergeWithInitialExpressions(raw);
 }
 
 export function saveExpressions(expressions: Expression[]): void {

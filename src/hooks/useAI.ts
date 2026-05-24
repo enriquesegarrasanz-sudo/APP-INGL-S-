@@ -7,7 +7,7 @@ export function useAI() {
   const [error, setError] = useState<string | null>(null);
   const [providerName, setProviderName] = useState<string | null>(null);
 
-  const autoFill = useCallback(async (english: string): Promise<AIAutoFillResult | null> => {
+  const autoFill = useCallback(async (inputExpression: string, languageHint = 'auto'): Promise<AIAutoFillResult | null> => {
     setLoading(true);
     setError(null);
 
@@ -21,7 +21,7 @@ export function useAI() {
         return null;
       }
 
-      const result = await autoFillExpression(english);
+      const result = await autoFillExpression(inputExpression, languageHint);
       setLoading(false);
       return result;
     } catch (e) {

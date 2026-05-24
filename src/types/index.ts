@@ -46,6 +46,8 @@ export interface ReviewResult {
 export type ReviewQuality = 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface AIAutoFillResult {
+  english: string;
+  detected_language?: 'spanish' | 'english' | 'mixed';
   spanish_source: string;
   meaning: string;
   pronunciation_es: string;
@@ -63,7 +65,7 @@ export interface AIAutoFillResult {
 export interface AIProvider {
   name: string;
   available: () => Promise<boolean>;
-  autoFill: (englishExpression: string) => Promise<AIAutoFillResult | null>;
+  autoFill: (inputExpression: string, languageHint?: string) => Promise<AIAutoFillResult | null>;
 }
 
 export type TTSSpeed = 'slow' | 'normal' | 'fast' | 'native';

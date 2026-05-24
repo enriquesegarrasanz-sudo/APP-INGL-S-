@@ -7,6 +7,7 @@ export type AIServiceStatus = 'available' | 'unavailable' | 'checking';
 
 const STORAGE_KEY = 'sparring-ai-provider';
 const PREFERENCES: AIPreference[] = ['auto', 'ollama', 'deepseek'];
+const STATUS_REFRESH_MS = 15000;
 
 function readPreference(): AIPreference {
   const stored = localStorage.getItem(STORAGE_KEY) as AIPreference | null;
@@ -33,11 +34,33 @@ export function useAIPreference() {
   }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
+    const initialTimer = window.setTimeout(() => {
       void checkServices(false);
     }, 0);
 
-    return () => window.clearTimeout(timer);
+    const refreshTimer = window.setInterval(() => {
+      void checkServices(false);
+    }, STATUS_REFRESH_MS);
+
+    const refreshOnFocus = () => {
+      void checkServices(false);
+    };
+
+    const refreshOnVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        void checkServices(false);
+      }
+    };
+
+    window.addEventListener('focus', refreshOnFocus);
+    document.addEventListener('visibilitychange', refreshOnVisibility);
+
+    return () => {
+      window.clearTimeout(initialTimer);
+      window.clearInterval(refreshTimer);
+      window.removeEventListener('focus', refreshOnFocus);
+      document.removeEventListener('visibilitychange', refreshOnVisibility);
+    };
   }, [checkServices]);
 
   const setPreference = useCallback((nextPreference: AIPreference) => {
@@ -51,5 +74,6 @@ export function useAIPreference() {
     setPreference,
     ollamaStatus,
     deepseekStatus,
+    refreshServices: checkServices,
   };
 }

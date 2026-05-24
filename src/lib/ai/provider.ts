@@ -49,13 +49,13 @@ export async function getAIProvider(): Promise<AIProvider | null> {
   return null;
 }
 
-export async function autoFillExpression(englishExpr: string): Promise<AIAutoFillResult | null> {
+export async function autoFillExpression(inputExpression: string, languageHint = 'auto'): Promise<AIAutoFillResult | null> {
   const provider = await getAIProvider();
   if (!provider) {
     console.warn('[AI] Cannot auto-fill: no provider available');
     return null;
   }
 
-  console.log(`[AI] Auto-filling "${englishExpr}" with ${provider.name}`);
-  return provider.autoFill(englishExpr);
+  console.log(`[AI] Auto-filling "${inputExpression}" with ${provider.name}`);
+  return provider.autoFill(inputExpression, languageHint);
 }

@@ -12,13 +12,20 @@ interface OllamaTagsResponse {
   models?: OllamaModel[];
 }
 
-function buildPrompt(englishExpr: string): string {
+function buildPrompt(inputExpression: string, languageHint = 'auto'): string {
   return `You are an English-Spanish language expert helping a native Spanish speaker learn natural English expressions.
 
-Given this English expression: "${englishExpr}"
+The user may give you an expression in Spanish or English.
+Language hint: "${languageHint}"
+Input expression: "${inputExpression}"
+
+If the input is Spanish, translate the intended meaning into natural English, not literal English.
+If the input is English, keep or improve the natural English expression and explain how a Spanish speaker would say it.
 
 Return ONLY a JSON object (no markdown, no backticks, no preamble) with these fields:
 {
+  "english": "the natural English expression to save",
+  "detected_language": "spanish, english, or mixed",
   "spanish_source": "how a Spanish speaker would naturally say this in colloquial Spanish",
   "meaning": "clear explanation of the meaning in English (1 sentence)",
   "pronunciation_es": "phonetic approximation using Spanish sounds (e.g. 'tu meik it CON-kriit')",
@@ -77,7 +84,7 @@ export class OllamaProvider implements AIProvider {
     return (await this.getAvailableModels()).length > 0;
   }
 
-  async autoFill(englishExpression: string): Promise<AIAutoFillResult | null> {
+  async autoFill(inputExpression: string, languageHint = 'auto'): Promise<AIAutoFillResult | null> {
     const model = await this.getModelForRequest();
     if (!model) {
       console.warn('[Ollama] No local models available');
@@ -99,7 +106,7 @@ export class OllamaProvider implements AIProvider {
             },
             {
               role: 'user',
-              content: buildPrompt(englishExpression),
+              content: buildPrompt(inputExpression, languageHint),
             },
           ],
           stream: false,
@@ -130,6 +137,7 @@ export class OllamaProvider implements AIProvider {
         .trim();
 
       const result: AIAutoFillResult = JSON.parse(cleaned);
+      if (!result.english) result.english = inputExpression;
       return result;
     } catch (error) {
       console.error('[Ollama] Error:', error);

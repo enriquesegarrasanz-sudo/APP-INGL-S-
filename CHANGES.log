@@ -1,5 +1,32 @@
 # CHANGES.log
 
+## 2026-05-25 - QA integral y ajuste Quick Add
+- Ran full technical QA: build, lint, npm audit, dataset integrity, SM-2 guard checks, migration checks, API connectivity, and browser verification on desktop/tablet.
+- Verified DeepSeek, Ollama, Google Apps Script ping, and MyMemory translation endpoints without exposing secrets.
+- Fixed Quick Add language detection so natural Spanish phrases such as "la escena no termina de funcionar" are translated as Spanish-to-English in auto mode.
+- Branch: main
+- Status: Build, lint, API checks, and browser QA passing; Web Speech runtime remains browser-dependent.
+
+## 2026-05-25 - Captura bilingue de vocabulario
+- Reworked quick add into a bidirectional vocabulary capture flow for Spanish-to-English and English-to-Spanish entries.
+- Updated AI autofill prompts to accept either language and return a natural English expression plus Spanish source, usage metadata, blocks, examples, mistakes, alternatives, and tags.
+- Added language mode selection, editable enriched fields, multi-block assignment, TTS preview, and duplicate warnings before saving.
+- Branch: main
+- Status: Build, lint, and browser modal verification passing.
+
+## 2026-05-25 - Reconexion automatica del estado de IA
+- Added automatic AI status refresh in Settings after page load, window focus, visibility changes, and every 15 seconds.
+- Added a manual "Recomprobar" action so Ollama and DeepSeek status can recover without reopening the app.
+- Branch: main
+- Status: Build, lint, and browser Settings verification passing.
+
+## 2026-05-25 - Restauracion automatica del vocabulario base
+- Fixed expression loading so the 173 base vocabulary entries are always merged into existing local data instead of only loading on empty storage.
+- Preserved user-created expressions and current progress/status when merging the base vocabulary.
+- Fixed the context filter default so "Todos los contextos" does not hide the library.
+- Branch: main
+- Status: Build, lint, and browser vocabulary verification passing.
+
 ## 2026-05-25 - Pronunciacion transversal
 - Removed the dedicated Pronunciacion navigation mode and moved TTS speed plus chuleta controls into the global header.
 - Added reusable speakable text for expressions so full phrases and individual words can be played from Biblioteca and Repaso.

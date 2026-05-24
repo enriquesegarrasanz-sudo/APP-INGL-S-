@@ -22,7 +22,7 @@ export default function App() {
   const [view, setView] = useState('themes');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterBlock, setFilterBlock] = useState<string>('all');
-  const [filterContext, setFilterContext] = useState('');
+  const [filterContext, setFilterContext] = useState('all');
   const [search, setSearch] = useState('');
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'all' | 'grouped'>('all');
@@ -47,7 +47,7 @@ export default function App() {
       if (filterStatus !== 'all' && expression.status !== filterStatus) return false;
       if (filterBlock !== 'all' && !expression.blocks.includes(filterBlock)) return false;
       if (
-        filterContext &&
+        filterContext !== 'all' &&
         !expression.contexts.some((context) =>
           context.toLowerCase().includes(filterContext.toLowerCase())
         )
@@ -174,6 +174,7 @@ export default function App() {
 
       {showQuickAdd && (
         <QuickAddModal
+          existingExpressions={expressions}
           onSave={handleSaveExpression}
           onClose={() => setShowQuickAdd(false)}
         />

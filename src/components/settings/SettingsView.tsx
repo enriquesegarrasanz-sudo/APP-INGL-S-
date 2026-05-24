@@ -42,7 +42,7 @@ export default function SettingsView({
 }: SettingsViewProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [syncing, setSyncing] = useState(false);
-  const { preference, setPreference, ollamaStatus, deepseekStatus } = useAIPreference();
+  const { preference, setPreference, ollamaStatus, deepseekStatus, refreshServices } = useAIPreference();
 
   const activeCount = expressions.filter((expression) => expression.status === 'active').length;
   const learningCount = expressions.filter((expression) => expression.status === 'learning').length;
@@ -116,12 +116,21 @@ export default function SettingsView({
 
       <div className="flex flex-col gap-6">
         <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6">
-          <div className="flex flex-col gap-2 mb-5">
-            <h3 className="text-lg font-bold m-0">Inteligencia Artificial</h3>
-            <div className="flex flex-wrap gap-4">
-              <ServiceStatus label="Ollama" status={ollamaStatus} availableText="Conectado" unavailableText="Sin conexión local" />
-              <ServiceStatus label="DeepSeek" status={deepseekStatus} availableText="API conectada" unavailableText="API key no cargada" />
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-lg font-bold m-0">Inteligencia Artificial</h3>
+              <div className="flex flex-wrap gap-4">
+                <ServiceStatus label="Ollama" status={ollamaStatus} availableText="Conectado" unavailableText="Sin conexión local" />
+                <ServiceStatus label="DeepSeek" status={deepseekStatus} availableText="API conectada" unavailableText="API key no cargada" />
+              </div>
             </div>
+            <button
+              type="button"
+              onClick={() => void refreshServices()}
+              className="px-4 py-2 text-sm font-bold text-text-muted bg-surface border border-border-light rounded-xl cursor-pointer hover:border-accent hover:text-accent transition-colors"
+            >
+              Recomprobar
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

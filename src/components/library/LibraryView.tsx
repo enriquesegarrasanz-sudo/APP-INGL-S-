@@ -114,7 +114,7 @@ export default function LibraryView({
             onClick={onQuickAdd}
             className="px-5 py-2.5 text-sm font-bold text-accent bg-surface border border-border-light rounded-xl hover:bg-accent-bg transition-colors cursor-pointer"
           >
-            + Expresion rapida
+            + Anadir vocabulario
           </button>
           <button
             onClick={onNew}
