@@ -33,7 +33,8 @@ function createBlankExpression(overrides: Partial<Expression> = {}): Expression 
     pronunciation_note: '',
     register: '',
     contexts: [],
-    block: BLOCKS[0],
+    blocks: [BLOCKS[0]],
+    related_ids: [],
     examples: [],
     common_mistake: '',
     better_alternatives: [],
@@ -81,7 +82,7 @@ export default function QuickAddModal({ onSave, onClose }: QuickAddModalProps) {
         setExamples(result.examples);
         setCommonMistake(result.common_mistake);
         setPronunciationNote(result.pronunciation_note);
-        if (result.block) setBlock(result.block);
+        if (result.blocks?.[0]) setBlock(result.blocks[0]);
         setFilled(true);
       } else {
         setError('No se pudo conectar con la IA. Asegurate de tener Ollama corriendo o una API key de DeepSeek configurada.');
@@ -128,7 +129,7 @@ export default function QuickAddModal({ onSave, onClose }: QuickAddModalProps) {
       examples: examples.filter((e) => e.trim()),
       common_mistake: commonMistake,
       pronunciation_note: pronunciationNote,
-      block,
+      blocks: [block],
     });
     onSave(expr);
   };

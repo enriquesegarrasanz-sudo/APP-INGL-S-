@@ -49,7 +49,7 @@ export default function App() {
   const filtered = useMemo(() => {
     return expressions.filter((e) => {
       if (filterStatus !== 'all' && e.status !== filterStatus) return false;
-      if (filterBlock !== 'all' && e.block !== filterBlock) return false;
+      if (filterBlock !== 'all' && !e.blocks.includes(filterBlock)) return false;
       if (filterContext && !e.contexts.some((c) => c.toLowerCase().includes(filterContext.toLowerCase()))) return false;
       if (search) {
         const s = search.toLowerCase();

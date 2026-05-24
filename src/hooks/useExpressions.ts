@@ -15,6 +15,7 @@ export function useExpressions() {
   const addExpression = useCallback((expr: NewExpression) => {
     const newExpr: Expression = {
       ...expr,
+      related_ids: expr.related_ids ?? [],
       id: generateId(expr.english),
       ease_factor: 2.5,
       interval: 0,

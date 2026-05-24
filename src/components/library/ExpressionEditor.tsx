@@ -22,7 +22,8 @@ function createBlankExpression(): Expression {
     pronunciation_note: '',
     register: 'neutral',
     contexts: [],
-    block: BLOCKS[0],
+    blocks: [BLOCKS[0]],
+    related_ids: [],
     examples: [],
     common_mistake: '',
     better_alternatives: [],
@@ -169,8 +170,8 @@ export default function ExpressionEditor({
           <div>
             <label className={labelClasses}>Bloque</label>
             <select
-              value={form.block}
-              onChange={(e) => update('block', e.target.value)}
+              value={form.blocks[0] ?? ''}
+              onChange={(e) => update('blocks', [e.target.value])}
               className={selectClasses}
             >
               {BLOCKS.map((b) => (

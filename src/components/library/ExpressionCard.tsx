@@ -60,7 +60,7 @@ export default function ExpressionCard({
 
         {/* Block tag — md+ */}
         <span className="hidden md:inline-flex shrink-0">
-          <Tag>{expr.block}</Tag>
+          <Tag>{expr.blocks[0] ?? ''}</Tag>
         </span>
 
         {/* Status label — lg+ */}

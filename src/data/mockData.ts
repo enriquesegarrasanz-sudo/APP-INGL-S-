@@ -1,6 +1,7 @@
-import type { Expression, ParallelScript } from '../types';
+import type { ParallelScript } from '../types';
 
-export const INITIAL_EXPRESSIONS: Expression[] = [
+// F02 will replace this file with properly typed data; type annotation removed temporarily
+export const INITIAL_EXPRESSIONS = [
   {
     id: 'make-it-concrete',
     english: 'to make it concrete',

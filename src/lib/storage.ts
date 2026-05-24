@@ -1,6 +1,35 @@
 import type { AppData, Expression, ParallelScript, ReviewSession } from '../types';
 import { INITIAL_EXPRESSIONS, INITIAL_SCRIPTS } from '../data/mockData';
 
+const OLD_BLOCK_MAP: Record<string, string> = {
+  'Ideas in development': 'Ideas & Creativity',
+  'Clarity and structure': 'Structure & Systems',
+  'Judgment and decisions': 'Judgment & Decisions',
+  'Systems and architecture': 'AI & Technology',
+  'Learning and practice': 'Ideas & Creativity',
+  'Memory and organization': 'Structure & Systems',
+  'Communication': 'Communication',
+};
+
+export function migrateExpression(expr: Record<string, unknown>): Expression {
+  const migrated = { ...expr } as Record<string, unknown>;
+
+  if (typeof migrated.block === 'string') {
+    migrated.blocks = [OLD_BLOCK_MAP[migrated.block] ?? 'Communication'];
+    delete migrated.block;
+  }
+
+  if (!Array.isArray(migrated.blocks) || migrated.blocks.length === 0) {
+    migrated.blocks = ['Communication'];
+  }
+
+  if (!Array.isArray(migrated.related_ids)) {
+    migrated.related_ids = [];
+  }
+
+  return migrated as unknown as Expression;
+}
+
 const STORAGE_KEYS = {
   expressions: 'sparring-expressions',
   scripts: 'sparring-scripts',
@@ -61,7 +90,9 @@ async function cloudSave(data: AppData): Promise<boolean> {
 // ── Public API ──
 
 export function loadExpressions(): Expression[] {
-  return loadLocal(STORAGE_KEYS.expressions, INITIAL_EXPRESSIONS);
+  const raw = loadLocal<Record<string, unknown>[]>(STORAGE_KEYS.expressions, []);
+  const source = raw.length > 0 ? raw : (INITIAL_EXPRESSIONS as unknown as Record<string, unknown>[]);
+  return source.map(migrateExpression);
 }
 
 export function saveExpressions(expressions: Expression[]): void {

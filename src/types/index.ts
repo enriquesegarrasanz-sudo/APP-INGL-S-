@@ -10,7 +10,8 @@ export interface Expression {
   pronunciation_note: string;
   register: string;
   contexts: string[];
-  block: string;
+  blocks: string[];
+  related_ids: string[];
   examples: string[];
   common_mistake: string;
   better_alternatives: string[];
@@ -71,7 +72,7 @@ export interface AIAutoFillResult {
   common_mistake: string;
   better_alternatives: string[];
   tags: string[];
-  block: string;
+  blocks: string[];
 }
 
 export interface AIProvider {
@@ -89,14 +90,38 @@ export interface AppData {
 }
 
 export const BLOCKS = [
-  'Ideas in development',
-  'Clarity and structure',
-  'Judgment and decisions',
-  'Systems and architecture',
-  'Learning and practice',
-  'Memory and organization',
+  'Cinema & Storytelling',
+  'AI & Technology',
+  'Ideas & Creativity',
+  'Business & Networking',
+  'Structure & Systems',
+  'Judgment & Decisions',
+  'Inner Life & Growth',
   'Communication',
+  'Art & Culture',
+  'Daily Life & Social',
 ] as const;
+
+export interface ThemeBlock {
+  id: string;
+  label: string;
+  label_es: string;
+  description: string;
+  priority: number;
+}
+
+export const THEME_BLOCKS: ThemeBlock[] = [
+  { id: 'cinema-storytelling', label: 'Cinema & Storytelling', label_es: 'Cine y Narrativa', description: 'Dirección, guión, producción, narrativa visual', priority: 1 },
+  { id: 'ai-technology', label: 'AI & Technology', label_es: 'IA y Tecnología', description: 'Inteligencia artificial, herramientas, desarrollo, workflows', priority: 1 },
+  { id: 'ideas-creativity', label: 'Ideas & Creativity', label_es: 'Ideas y Creatividad', description: 'Explicar ideas, brainstorming, creatividad', priority: 1 },
+  { id: 'business-networking', label: 'Business & Networking', label_es: 'Negocio y Networking', description: 'Marca personal, servicios, pitching, negociación', priority: 2 },
+  { id: 'structure-systems', label: 'Structure & Systems', label_es: 'Estructura y Sistemas', description: 'Productividad, organización, planificación, hábitos', priority: 2 },
+  { id: 'judgment-decisions', label: 'Judgment & Decisions', label_es: 'Juicio y Decisiones', description: 'Evaluar, opinar, feedback, pensamiento crítico', priority: 3 },
+  { id: 'inner-life-growth', label: 'Inner Life & Growth', label_es: 'Vida Interior y Crecimiento', description: 'Psicología, autoconocimiento, filosofía', priority: 3 },
+  { id: 'communication', label: 'Communication', label_es: 'Comunicación', description: 'Emails, mensajes, seguimiento, propuestas', priority: 2 },
+  { id: 'art-culture', label: 'Art & Culture', label_es: 'Arte y Cultura', description: 'Pintura, museos, vanguardias, literatura, danza', priority: 4 },
+  { id: 'daily-life-social', label: 'Daily Life & Social', label_es: 'Vida Diaria y Social', description: 'Vida en Madrid, planes, conversaciones cotidianas', priority: 4 },
+];
 
 export const STATUSES: ExpressionStatus[] = ['new', 'learning', 'active', 'mastered', 'needs_review'];
 
