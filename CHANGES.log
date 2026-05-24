@@ -1,5 +1,11 @@
 # CHANGES.log
 
+## 2026-05-24 - Ajustes con selector IA y repaso por tema
+- Implemented Settings with AI provider preference, service status, Google sync, data export/import, and summary stats.
+- Added theme filtering to flashcard review sessions and removed the legacy DataView.
+- Branch: feat/reestructura-tematica
+- Status: Build, lint, and browser DOM verification passing.
+
 ## 2026-05-24 - Vista de temas y biblioteca por bloques
 - Implemented the Themes grid with block progress, priority badges, and navigation into filtered library sections.
 - Added flat/grouped library modes, thematic section headers, multi-block expression tags, and related-expression navigation.

@@ -15,7 +15,7 @@ import FlashcardView from './components/flashcards/FlashcardView';
 import SettingsView from './components/settings/SettingsView';
 
 export default function App() {
-  const { expressions, addExpression, updateExpression, deleteExpression, updateStatus } = useExpressions();
+  const { expressions, addExpression, updateExpression, deleteExpression, updateStatus, importData } = useExpressions();
   const review = useReview();
 
   const [view, setView] = useState('themes');
@@ -148,7 +148,7 @@ export default function App() {
 
         {view === 'flashcards' && (
           <FlashcardView
-            dueCount={review.dueCount}
+            getDueCountForBlock={review.getDueCountForBlock}
             currentSession={review.currentSession}
             currentCard={review.currentCard}
             cardIndex={review.cardIndex}
@@ -161,7 +161,13 @@ export default function App() {
           />
         )}
 
-        {view === 'settings' && <SettingsView />}
+        {view === 'settings' && (
+          <SettingsView
+            expressions={expressions}
+            onImport={importData}
+            copyText={(text) => setToast(text)}
+          />
+        )}
       </main>
 
       {showQuickAdd && (

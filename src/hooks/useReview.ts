@@ -15,14 +15,24 @@ export function useReview() {
     [expressions]
   );
 
+  const getDueCountForBlock = useCallback((blockFilter: string | null) => {
+    const filtered = blockFilter
+      ? expressions.filter((expression) => expression.blocks.includes(blockFilter))
+      : expressions;
+    return getDueExpressions(getReviewableExpressions(filtered)).length;
+  }, [expressions]);
+
   const currentCard = batch.length > 0 && cardIndex < batch.length ? batch[cardIndex] : null;
   const totalCards = batch.length;
 
-  const startSession = useCallback((batchSize = 10) => {
+  const startSession = useCallback((batchSize = 10, blockFilter: string | null = null) => {
     const fresh = loadExpressions();
     setExpressions(fresh);
 
-    const selected = selectReviewBatch(fresh, batchSize);
+    const filtered = blockFilter
+      ? fresh.filter((expression) => expression.blocks.includes(blockFilter))
+      : fresh;
+    const selected = selectReviewBatch(filtered, batchSize);
     if (selected.length === 0) return;
 
     const session: ReviewSession = {
@@ -114,6 +124,7 @@ export function useReview() {
 
   return {
     dueCount,
+    getDueCountForBlock,
     currentSession,
     currentCard,
     cardIndex,
