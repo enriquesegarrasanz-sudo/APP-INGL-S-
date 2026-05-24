@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { Expression, ExpressionStatus } from '../../types';
 import { BLOCKS, STATUSES, STATUS_LABELS } from '../../types';
 import Modal from '../ui/Modal';
@@ -22,7 +22,8 @@ function createBlankExpression(): Expression {
     pronunciation_note: '',
     register: 'neutral',
     contexts: [],
-    block: BLOCKS[0],
+    blocks: [BLOCKS[0]],
+    related_ids: [],
     examples: [],
     common_mistake: '',
     better_alternatives: [],
@@ -47,10 +48,6 @@ export default function ExpressionEditor({
   const [form, setForm] = useState<Expression>(
     expression ?? createBlankExpression()
   );
-
-  useEffect(() => {
-    setForm(expression ?? createBlankExpression());
-  }, [expression]);
 
   const update = <K extends keyof Expression>(key: K, value: Expression[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -150,7 +147,7 @@ export default function ExpressionEditor({
           />
         </div>
 
-        {/* Row 3: Register + Block */}
+        {/* Row 3: Register + Blocks */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className={labelClasses}>Registro</label>
@@ -167,18 +164,31 @@ export default function ExpressionEditor({
             </select>
           </div>
           <div>
-            <label className={labelClasses}>Bloque</label>
-            <select
-              value={form.block}
-              onChange={(e) => update('block', e.target.value)}
-              className={selectClasses}
-            >
-              {BLOCKS.map((b) => (
-                <option key={b} value={b}>
-                  {b}
-                </option>
-              ))}
-            </select>
+            <label className={labelClasses}>Bloques</label>
+            <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto rounded-lg border border-border-light bg-input-bg p-3">
+              {BLOCKS.map((block) => {
+                const checked = form.blocks.includes(block);
+                return (
+                  <label
+                    key={block}
+                    className="flex items-center gap-2 text-sm font-semibold text-text cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={(e) => {
+                        const nextBlocks = e.target.checked
+                          ? [...form.blocks, block]
+                          : form.blocks.filter((currentBlock) => currentBlock !== block);
+                        update('blocks', nextBlocks.length > 0 ? nextBlocks : [block]);
+                      }}
+                      className="w-4 h-4 accent-accent"
+                    />
+                    <span>{block}</span>
+                  </label>
+                );
+              })}
+            </div>
           </div>
         </div>
 

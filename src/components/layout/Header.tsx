@@ -4,12 +4,11 @@ interface HeaderProps {
 }
 
 const TABS = [
+  { key: 'themes', label: 'Temas' },
   { key: 'library', label: 'Biblioteca' },
   { key: 'pronunciation', label: 'Pronunciación' },
   { key: 'flashcards', label: 'Repaso' },
-  { key: 'scripts', label: 'Scripts' },
-  { key: 'practice', label: 'Práctica' },
-  { key: 'data', label: 'Datos' },
+  { key: 'settings', label: 'Ajustes' },
 ];
 
 export default function Header({ currentView, onViewChange }: HeaderProps) {

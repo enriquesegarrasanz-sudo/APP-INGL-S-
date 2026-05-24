@@ -21,7 +21,7 @@ Return ONLY a JSON object (no markdown, no backticks, no preamble) with these fi
   "common_mistake": "a typical error a Spanish speaker would make",
   "better_alternatives": ["2-3 natural alternative ways to express the same idea"],
   "tags": ["3-4 relevant single-word tags"],
-  "block": "one of: Ideas in development, Clarity and structure, Judgment and decisions, Systems and architecture, Learning and practice, Memory and organization, Communication"
+  "blocks": ["1-3 relevant blocks from: Cinema & Storytelling, AI & Technology, Ideas & Creativity, Business & Networking, Structure & Systems, Judgment & Decisions, Inner Life & Growth, Communication, Art & Culture, Daily Life & Social"]
 }`;
 }
 

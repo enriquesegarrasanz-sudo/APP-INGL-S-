@@ -1,4 +1,4 @@
-import { STATUSES, BLOCKS, STATUS_LABELS } from '../../types';
+import { STATUSES, THEME_BLOCKS, STATUS_LABELS } from '../../types';
 
 interface FilterBarProps {
   search: string;
@@ -28,7 +28,6 @@ export default function FilterBar({
 
   return (
     <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 bg-surface rounded-xl px-4 sm:px-5 py-4">
-      {/* Search */}
       <div className="relative w-full sm:flex-1 sm:min-w-48">
         <svg
           className="absolute left-3 top-1/2 -translate-y-1/2 text-text-dim pointer-events-none"
@@ -48,49 +47,46 @@ export default function FilterBar({
           type="text"
           placeholder="Buscar..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(event) => setSearch(event.target.value)}
           className="w-full h-11 pl-10 pr-4 rounded-lg border border-border-light bg-input-bg text-sm text-text placeholder:text-text-dim focus:outline-none focus:border-accent transition-colors"
         />
       </div>
 
-      {/* Status filter */}
       <select
         value={filterStatus}
-        onChange={(e) => setFilterStatus(e.target.value)}
+        onChange={(event) => setFilterStatus(event.target.value)}
         className={selectClasses}
       >
         <option value="all">Todos los estados</option>
-        {STATUSES.map((s) => (
-          <option key={s} value={s}>
-            {STATUS_LABELS[s]}
+        {STATUSES.map((status) => (
+          <option key={status} value={status}>
+            {STATUS_LABELS[status]}
           </option>
         ))}
       </select>
 
-      {/* Block filter */}
       <select
         value={filterBlock}
-        onChange={(e) => setFilterBlock(e.target.value)}
+        onChange={(event) => setFilterBlock(event.target.value)}
         className={selectClasses}
       >
         <option value="all">Todos los bloques</option>
-        {BLOCKS.map((b) => (
-          <option key={b} value={b}>
-            {b}
+        {THEME_BLOCKS.map((block) => (
+          <option key={block.id} value={block.label}>
+            {block.label_es}
           </option>
         ))}
       </select>
 
-      {/* Context filter */}
       <select
         value={filterContext}
-        onChange={(e) => setFilterContext(e.target.value)}
+        onChange={(event) => setFilterContext(event.target.value)}
         className={selectClasses}
       >
         <option value="all">Todos los contextos</option>
-        {allContexts.map((c) => (
-          <option key={c} value={c}>
-            {c}
+        {allContexts.map((context) => (
+          <option key={context} value={context}>
+            {context}
           </option>
         ))}
       </select>

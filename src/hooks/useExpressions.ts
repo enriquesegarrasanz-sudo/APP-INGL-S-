@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Expression, ExpressionStatus } from '../types';
-import { loadExpressions, saveExpressions } from '../lib/storage';
+import type { AppData, Expression, ExpressionStatus } from '../types';
+import { importAllData, loadExpressions, saveExpressions } from '../lib/storage';
 import { generateId } from '../lib/utils';
 
 type NewExpression = Omit<Expression, 'id' | 'ease_factor' | 'interval' | 'repetitions' | 'next_review' | 'created_at'>;
@@ -15,6 +15,7 @@ export function useExpressions() {
   const addExpression = useCallback((expr: NewExpression) => {
     const newExpr: Expression = {
       ...expr,
+      related_ids: expr.related_ids ?? [],
       id: generateId(expr.english),
       ease_factor: 2.5,
       interval: 0,
@@ -39,5 +40,10 @@ export function useExpressions() {
     );
   }, []);
 
-  return { expressions, addExpression, updateExpression, deleteExpression, updateStatus };
+  const importData = useCallback((data: Partial<AppData>) => {
+    importAllData(data);
+    setExpressions(loadExpressions());
+  }, []);
+
+  return { expressions, addExpression, updateExpression, deleteExpression, updateStatus, importData };
 }

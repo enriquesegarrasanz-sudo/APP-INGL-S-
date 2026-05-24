@@ -3,26 +3,39 @@ import type { Expression, ReviewSession, ReviewQuality } from '../types';
 import { selectReviewBatch, applyReview, getDueExpressions, getReviewableExpressions } from '../lib/spaced-repetition';
 import { loadExpressions, saveExpressions, loadReviews, saveReviews } from '../lib/storage';
 
-export function useReview() {
-  const [expressions, setExpressions] = useState<Expression[]>(() => loadExpressions());
+export function useReview(sourceExpressions?: Expression[]) {
+  const [expressions, setExpressions] = useState<Expression[]>(
+    () => sourceExpressions ?? loadExpressions()
+  );
   const [currentSession, setCurrentSession] = useState<ReviewSession | null>(null);
   const [batch, setBatch] = useState<Expression[]>([]);
   const [cardIndex, setCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const reviewExpressions = sourceExpressions ?? expressions;
 
   const dueCount = useMemo(
-    () => getDueExpressions(getReviewableExpressions(expressions)).length,
-    [expressions]
+    () => getDueExpressions(getReviewableExpressions(reviewExpressions)).length,
+    [reviewExpressions]
   );
+
+  const getDueCountForBlock = useCallback((blockFilter: string | null) => {
+    const filtered = blockFilter
+      ? reviewExpressions.filter((expression) => expression.blocks.includes(blockFilter))
+      : reviewExpressions;
+    return getDueExpressions(getReviewableExpressions(filtered)).length;
+  }, [reviewExpressions]);
 
   const currentCard = batch.length > 0 && cardIndex < batch.length ? batch[cardIndex] : null;
   const totalCards = batch.length;
 
-  const startSession = useCallback((batchSize = 10) => {
-    const fresh = loadExpressions();
+  const startSession = useCallback((batchSize = 10, blockFilter: string | null = null) => {
+    const fresh = reviewExpressions;
     setExpressions(fresh);
 
-    const selected = selectReviewBatch(fresh, batchSize);
+    const filtered = blockFilter
+      ? fresh.filter((expression) => expression.blocks.includes(blockFilter))
+      : fresh;
+    const selected = selectReviewBatch(filtered, batchSize);
     if (selected.length === 0) return;
 
     const session: ReviewSession = {
@@ -38,7 +51,7 @@ export function useReview() {
     setCardIndex(0);
     setIsFlipped(false);
     setCurrentSession(session);
-  }, []);
+  }, [reviewExpressions]);
 
   const flipCard = useCallback(() => {
     setIsFlipped(true);
@@ -51,7 +64,7 @@ export function useReview() {
     const updated = applyReview(currentCard, quality);
 
     // Update expressions list and persist
-    const newExpressions = expressions.map((e) => (e.id === updated.id ? updated : e));
+    const newExpressions = reviewExpressions.map((e) => (e.id === updated.id ? updated : e));
     setExpressions(newExpressions);
     saveExpressions(newExpressions);
 
@@ -93,7 +106,7 @@ export function useReview() {
       setCardIndex(nextIndex);
       setIsFlipped(false);
     }
-  }, [currentSession, currentCard, expressions, cardIndex, batch.length]);
+  }, [currentSession, currentCard, reviewExpressions, cardIndex, batch.length]);
 
   const endSession = useCallback(() => {
     if (currentSession && currentSession.cards_reviewed > 0 && !currentSession.completed_at) {
@@ -114,6 +127,7 @@ export function useReview() {
 
   return {
     dueCount,
+    getDueCountForBlock,
     currentSession,
     currentCard,
     cardIndex,

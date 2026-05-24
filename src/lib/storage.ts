@@ -1,9 +1,37 @@
-import type { AppData, Expression, ParallelScript, ReviewSession } from '../types';
-import { INITIAL_EXPRESSIONS, INITIAL_SCRIPTS } from '../data/mockData';
+import type { AppData, Expression, ReviewSession } from '../types';
+import { INITIAL_EXPRESSIONS } from '../data/mockData';
+
+const OLD_BLOCK_MAP: Record<string, string> = {
+  'Ideas in development': 'Ideas & Creativity',
+  'Clarity and structure': 'Structure & Systems',
+  'Judgment and decisions': 'Judgment & Decisions',
+  'Systems and architecture': 'AI & Technology',
+  'Learning and practice': 'Ideas & Creativity',
+  'Memory and organization': 'Structure & Systems',
+  'Communication': 'Communication',
+};
+
+export function migrateExpression(expr: Record<string, unknown>): Expression {
+  const migrated = { ...expr } as Record<string, unknown>;
+
+  if (typeof migrated.block === 'string') {
+    migrated.blocks = [OLD_BLOCK_MAP[migrated.block] ?? 'Communication'];
+    delete migrated.block;
+  }
+
+  if (!Array.isArray(migrated.blocks) || migrated.blocks.length === 0) {
+    migrated.blocks = ['Communication'];
+  }
+
+  if (!Array.isArray(migrated.related_ids)) {
+    migrated.related_ids = [];
+  }
+
+  return migrated as unknown as Expression;
+}
 
 const STORAGE_KEYS = {
   expressions: 'sparring-expressions',
-  scripts: 'sparring-scripts',
   reviews: 'sparring-reviews',
   lastSync: 'sparring-last-sync',
 } as const;
@@ -61,20 +89,13 @@ async function cloudSave(data: AppData): Promise<boolean> {
 // ── Public API ──
 
 export function loadExpressions(): Expression[] {
-  return loadLocal(STORAGE_KEYS.expressions, INITIAL_EXPRESSIONS);
+  const raw = loadLocal<Record<string, unknown>[]>(STORAGE_KEYS.expressions, []);
+  const source = raw.length > 0 ? raw : (INITIAL_EXPRESSIONS as unknown as Record<string, unknown>[]);
+  return source.map(migrateExpression);
 }
 
 export function saveExpressions(expressions: Expression[]): void {
   saveLocal(STORAGE_KEYS.expressions, expressions);
-  debouncedCloudSync();
-}
-
-export function loadScripts(): ParallelScript[] {
-  return loadLocal(STORAGE_KEYS.scripts, INITIAL_SCRIPTS);
-}
-
-export function saveScripts(scripts: ParallelScript[]): void {
-  saveLocal(STORAGE_KEYS.scripts, scripts);
   debouncedCloudSync();
 }
 
@@ -99,7 +120,6 @@ function debouncedCloudSync(): void {
 async function syncToCloud(): Promise<void> {
   const data: AppData = {
     expressions: loadExpressions(),
-    scripts: loadScripts(),
     reviews: loadReviews(),
   };
   const ok = await cloudSave(data);
@@ -113,7 +133,6 @@ export async function syncFromCloud(): Promise<AppData | null> {
   if (!cloud) return null;
 
   if (cloud.expressions?.length > 0) saveLocal(STORAGE_KEYS.expressions, cloud.expressions);
-  if (cloud.scripts?.length > 0) saveLocal(STORAGE_KEYS.scripts, cloud.scripts);
   if (cloud.reviews?.length > 0) saveLocal(STORAGE_KEYS.reviews, cloud.reviews);
   saveLocal(STORAGE_KEYS.lastSync, new Date().toISOString());
 
@@ -133,14 +152,12 @@ export function isCloudConfigured(): boolean {
 export function exportAllData(): AppData {
   return {
     expressions: loadExpressions(),
-    scripts: loadScripts(),
     reviews: loadReviews(),
   };
 }
 
 export function importAllData(data: Partial<AppData>): void {
   if (data.expressions) saveLocal(STORAGE_KEYS.expressions, data.expressions);
-  if (data.scripts) saveLocal(STORAGE_KEYS.scripts, data.scripts);
   if (data.reviews) saveLocal(STORAGE_KEYS.reviews, data.reviews);
   debouncedCloudSync();
 }
