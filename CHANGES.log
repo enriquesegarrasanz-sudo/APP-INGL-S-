@@ -1,5 +1,12 @@
 # CHANGES.log
 
+## 2026-05-24 - Verificacion final de reestructura tematica
+- Ran global QA for phases F01-F05: build, lint, dataset integrity, migration, deleted-file checks, and browser verification.
+- Fixed review sessions so Repaso uses the current expression state after status/theme changes.
+- Added multi-block editing in the expression editor and removed decorative UI symbols from the flashcard completion state.
+- Branch: feat/reestructura-tematica
+- Status: Build, lint, dataset validation, and browser verification passing.
+
 ## 2026-05-24 - Ajustes con selector IA y repaso por tema
 - Implemented Settings with AI provider preference, service status, Google sync, data export/import, and summary stats.
 - Added theme filtering to flashcard review sessions and removed the legacy DataView.

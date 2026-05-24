@@ -16,7 +16,7 @@ import SettingsView from './components/settings/SettingsView';
 
 export default function App() {
   const { expressions, addExpression, updateExpression, deleteExpression, updateStatus, importData } = useExpressions();
-  const review = useReview();
+  const review = useReview(expressions);
 
   const [view, setView] = useState('themes');
   const [filterStatus, setFilterStatus] = useState<string>('all');

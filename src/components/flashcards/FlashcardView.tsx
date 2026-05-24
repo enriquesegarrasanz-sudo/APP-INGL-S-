@@ -43,8 +43,8 @@ export default function FlashcardView({
 
     return (
       <div className="max-w-xl mx-auto py-16 text-center">
-        <div className="text-5xl mb-6">
-          {pct >= 80 ? '✨' : pct >= 50 ? '💪' : '📚'}
+        <div className="text-xs font-black uppercase tracking-wider text-accent mb-6">
+          Sesi&oacute;n cerrada
         </div>
         <h2 className="text-3xl font-black mb-2">Repaso completado</h2>
         <p className="text-text-muted text-lg mb-10">
