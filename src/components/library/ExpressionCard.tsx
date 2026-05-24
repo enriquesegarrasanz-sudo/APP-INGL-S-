@@ -40,7 +40,7 @@ export default function ExpressionCard({
       {/* Collapsed header - always visible */}
       <div
         onClick={onToggle}
-        className="w-full flex items-center gap-4 px-5 py-4 cursor-pointer text-left"
+        className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 cursor-pointer text-left"
       >
         {/* Status dot */}
         <span
@@ -48,14 +48,24 @@ export default function ExpressionCard({
           style={{ backgroundColor: STATUS_COLORS[expr.status] }}
         />
 
-        {/* English expression */}
-        <span className="text-lg font-bold text-text truncate">
-          {expr.english}
+        {/* Text column: English + Spanish always visible */}
+        <div className="flex-1 min-w-0">
+          <span className="text-sm sm:text-lg font-bold text-text block truncate leading-snug">
+            {expr.english}
+          </span>
+          <span className="text-xs sm:text-sm text-text-muted block truncate leading-tight">
+            {expr.spanish_source}
+          </span>
+        </div>
+
+        {/* Block tag — md+ */}
+        <span className="hidden md:inline-flex shrink-0">
+          <Tag>{expr.block}</Tag>
         </span>
 
-        {/* Spanish source */}
-        <span className="text-sm text-text-muted truncate hidden sm:inline">
-          {expr.spanish_source}
+        {/* Status label — lg+ */}
+        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-surface text-text-muted hidden lg:inline shrink-0">
+          {STATUS_LABELS[expr.status]}
         </span>
 
         {/* Audio */}
@@ -63,19 +73,9 @@ export default function ExpressionCard({
           <AudioButton text={expr.english} size="sm" />
         </span>
 
-        {/* Block tag */}
-        <span className="hidden md:inline-flex shrink-0">
-          <Tag>{expr.block}</Tag>
-        </span>
-
-        {/* Status label */}
-        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-surface text-text-muted hidden lg:inline">
-          {STATUS_LABELS[expr.status]}
-        </span>
-
         {/* Chevron */}
         <svg
-          className={`w-5 h-5 text-text-dim shrink-0 transition-transform duration-200 ml-auto ${
+          className={`w-5 h-5 text-text-dim shrink-0 transition-transform duration-200 ${
             expanded ? 'rotate-180' : ''
           }`}
           viewBox="0 0 24 24"

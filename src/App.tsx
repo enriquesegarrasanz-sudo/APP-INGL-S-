@@ -106,7 +106,7 @@ export default function App() {
 
       <Header currentView={view} onViewChange={setView} />
 
-      <main className="px-6 md:px-10 py-10 max-w-[1280px] mx-auto">
+      <main className="px-4 sm:px-6 md:px-10 py-6 md:py-10 max-w-[1280px] mx-auto">
         {view === 'library' && (
           <LibraryView
             expressions={filtered}

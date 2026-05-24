@@ -57,15 +57,15 @@ function PronunciationCard({ expression }: { expression: Expression }) {
   };
 
   return (
-    <div className="bg-white border border-border-light rounded-2xl p-6 flex gap-5 items-start">
+    <div className="bg-white border border-border-light rounded-2xl p-5 sm:p-6 flex gap-4 sm:gap-5 items-start">
       {/* Audio button */}
       <div className="shrink-0 pt-1">
-        <AudioButton text={expression.english} size="lg" />
+        <AudioButton text={expression.english} size="md" />
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <h3 className="text-xl font-bold mb-1 leading-snug">
+        <h3 className="text-lg sm:text-xl font-bold mb-1 leading-snug">
           {expression.english}
         </h3>
         <p className="text-text-muted text-sm mb-3">
@@ -73,7 +73,7 @@ function PronunciationCard({ expression }: { expression: Expression }) {
         </p>
 
         {/* Pronunciation */}
-        <code className="text-xl px-4 py-2 bg-surface rounded-lg font-mono inline-block mb-2">
+        <code className="text-base sm:text-xl px-3 sm:px-4 py-1.5 sm:py-2 bg-surface rounded-lg font-mono inline-block mb-2 max-w-full break-all">
           {expression.pronunciation_es}
         </code>
 

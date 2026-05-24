@@ -48,17 +48,17 @@ export default function FlashcardView({
           Buen trabajo. Sigue as&iacute;.
         </p>
 
-        <div className="grid grid-cols-3 gap-6 mb-10">
-          <div className="bg-surface rounded-xl p-6">
-            <div className="text-3xl font-black">{reviewed}</div>
+        <div className="grid grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-10">
+          <div className="bg-surface rounded-xl p-4 sm:p-6">
+            <div className="text-2xl sm:text-3xl font-black">{reviewed}</div>
             <div className="text-sm text-text-muted mt-1">Tarjetas</div>
           </div>
-          <div className="bg-success-bg rounded-xl p-6">
-            <div className="text-3xl font-black text-success">{correct}</div>
+          <div className="bg-success-bg rounded-xl p-4 sm:p-6">
+            <div className="text-2xl sm:text-3xl font-black text-success">{correct}</div>
             <div className="text-sm text-text-muted mt-1">Correctas</div>
           </div>
-          <div className="rounded-xl p-6" style={{ background: pct >= 70 ? 'var(--color-success-bg)' : 'var(--color-warning-bg)' }}>
-            <div className="text-3xl font-black">{pct}%</div>
+          <div className="rounded-xl p-4 sm:p-6" style={{ background: pct >= 70 ? 'var(--color-success-bg)' : 'var(--color-warning-bg)' }}>
+            <div className="text-2xl sm:text-3xl font-black">{pct}%</div>
             <div className="text-sm text-text-muted mt-1">Acierto</div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function FlashcardView({
         </div>
 
         {/* Card */}
-        <div className="bg-white border border-border-light rounded-2xl shadow-sm min-h-[340px] flex flex-col items-center justify-center p-10 text-center">
+        <div className="bg-white border border-border-light rounded-2xl shadow-sm min-h-[280px] sm:min-h-[340px] flex flex-col items-center justify-center p-5 sm:p-10 text-center">
           {!isFlipped ? (
             /* State B: Not flipped - Spanish side */
             <>
@@ -144,7 +144,7 @@ export default function FlashcardView({
 
         {/* Rating buttons - only when flipped */}
         {isFlipped && (
-          <div className="grid grid-cols-3 gap-3 mt-6 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-2 mt-6 sm:grid-cols-3 lg:grid-cols-6">
             {([0, 1, 2, 3, 4, 5] as ReviewQuality[]).map((q) => {
               const info = QUALITY_LABELS[q];
               return (
@@ -178,7 +178,7 @@ export default function FlashcardView({
         Sistema SM-2 &mdash; el mismo algoritmo que Anki
       </p>
 
-      <div className="bg-white border border-border-light rounded-2xl p-10 mb-8 shadow-sm">
+      <div className="bg-white border border-border-light rounded-2xl p-6 sm:p-10 mb-6 sm:mb-8 shadow-sm">
         <div className="text-6xl font-black mb-2">{dueCount}</div>
         <div className="text-text-muted text-lg">
           {dueCount === 1 ? 'tarjeta pendiente' : 'tarjetas pendientes'}

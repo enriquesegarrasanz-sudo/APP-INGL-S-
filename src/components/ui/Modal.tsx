@@ -26,15 +26,15 @@ export default function Modal({ title, onClose, children, maxWidth = '720px' }: 
 
   return (
     <div
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[1000] flex justify-center items-start pt-10 overflow-y-auto"
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[1000] flex justify-center items-start pt-4 sm:pt-10 overflow-y-auto px-4 sm:px-6"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
-        className="bg-white rounded-2xl p-10 w-full mb-10 shadow-xl"
+        className="bg-white rounded-2xl p-5 sm:p-10 w-full mb-4 sm:mb-10 shadow-xl"
         style={{ maxWidth }}
       >
-        <div className="flex justify-between items-center mb-8">
-          <h3 className="text-3xl font-black m-0">{title}</h3>
+        <div className="flex justify-between items-center mb-5 sm:mb-8">
+          <h3 className="text-2xl sm:text-3xl font-black m-0 pr-4">{title}</h3>
           <button
             onClick={onClose}
             className="w-12 h-12 flex items-center justify-center rounded-full bg-surface text-text-muted text-xl hover:bg-accent-bg cursor-pointer border-none"

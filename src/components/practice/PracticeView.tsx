@@ -58,8 +58,8 @@ export default function PracticeView({
       <h2 className="text-3xl font-black mb-8">Pr&aacute;ctica oral</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
-        {/* Left: Expression list */}
-        <div className="lg:col-span-3">
+        {/* Left: Expression list — order-2 on mobile so controls appear first */}
+        <div className="lg:col-span-3 order-2 lg:order-1">
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm font-bold text-text-muted">
               Expresiones ({expressions.length})
@@ -106,9 +106,9 @@ export default function PracticeView({
           </div>
         </div>
 
-        {/* Right: Controls */}
-        <div className="lg:col-span-2">
-          <div className="bg-white border border-border-light rounded-2xl p-6 sticky top-28">
+        {/* Right: Controls — order-1 on mobile so it appears first */}
+        <div className="lg:col-span-2 order-1 lg:order-2">
+          <div className="bg-white border border-border-light rounded-2xl p-6 lg:sticky lg:top-28">
             <div className="text-4xl font-black text-center mb-1">
               {selected.size}
             </div>

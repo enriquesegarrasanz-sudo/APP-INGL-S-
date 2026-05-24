@@ -1,2 +1,33 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
+
+/* Touch: elimina el delay de 300ms en tap en todos los controles interactivos */
+button,
+[role="button"],
+label.cursor-pointer,
+select,
+a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Active state visible en táctil (hover no existe en touch) */
+button:active,
+[role="button"]:active {
+  opacity: 0.75;
+}
+
+/* Utilidad para ocultar scrollbar manteniendo scroll funcional */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll suave en iOS para contenedores con overflow */
+.overflow-y-auto,
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}

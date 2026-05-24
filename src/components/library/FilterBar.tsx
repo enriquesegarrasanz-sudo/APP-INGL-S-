@@ -27,9 +27,9 @@ export default function FilterBar({
     'h-11 px-4 rounded-lg border border-border-light bg-input-bg text-sm text-text focus:outline-none focus:border-accent transition-colors cursor-pointer';
 
   return (
-    <div className="flex flex-wrap items-center gap-3 bg-surface rounded-xl px-5 py-4">
+    <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 bg-surface rounded-xl px-4 sm:px-5 py-4">
       {/* Search */}
-      <div className="relative flex-1 min-w-48">
+      <div className="relative w-full sm:flex-1 sm:min-w-48">
         <svg
           className="absolute left-3 top-1/2 -translate-y-1/2 text-text-dim pointer-events-none"
           width="16"

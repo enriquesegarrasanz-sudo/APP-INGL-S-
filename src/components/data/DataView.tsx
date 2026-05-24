@@ -88,7 +88,7 @@ export default function DataView({
       <h2 className="text-3xl font-black mb-8">Gesti&oacute;n de datos</h2>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
         <StatCard label="Total" value={expressions.length} />
         <StatCard label={STATUS_LABELS.active} value={activeCount} color="var(--color-status-active)" />
         <StatCard label={STATUS_LABELS.learning} value={learningCount} color="var(--color-status-learning)" />
