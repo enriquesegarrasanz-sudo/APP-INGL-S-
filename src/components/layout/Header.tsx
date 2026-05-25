@@ -63,13 +63,20 @@ export default function Header({ currentView, onViewChange }: HeaderProps) {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between gap-4 py-3 md:py-4">
-          <div>
-            <h1 className="text-base md:text-lg font-black leading-tight m-0 text-white">
-              Sparring English
-            </h1>
-            <p className="text-xs text-white/70 m-0 leading-tight">
-              Vocabulario personal
-            </p>
+          <div className="flex items-center gap-2.5">
+            <img
+              src="/logo-icon.png"
+              alt="Sparring English"
+              className="w-9 h-9 md:w-10 md:h-10 rounded-xl shadow-md shrink-0"
+            />
+            <div>
+              <h1 className="text-base md:text-lg font-black leading-tight m-0 text-white">
+                Sparring English
+              </h1>
+              <p className="text-xs text-white/70 m-0 leading-tight">
+                Vocabulario personal
+              </p>
+            </div>
           </div>
 
           <div className="hidden md:flex items-center gap-3">

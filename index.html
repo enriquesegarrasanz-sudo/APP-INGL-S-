@@ -1,10 +1,31 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Favicon y PWA icons -->
+    <link rel="icon" type="image/png" sizes="512x512" href="/logo-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Viewport y tema -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>app-ingl-s</title>
+    <meta name="theme-color" content="#7C5CFC" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Sparring" />
+
+    <!-- SEO y descripción -->
+    <meta name="description" content="Vocabulario personal de inglés para hispanohablantes" />
+
+    <!-- Open Graph (previsualizaciones en redes y mensajería) -->
+    <meta property="og:title" content="Sparring English" />
+    <meta property="og:description" content="Vocabulario personal de inglés" />
+    <meta property="og:image" content="/logo-full.png" />
+    <meta property="og:type" content="website" />
+
+    <title>Sparring English</title>
   </head>
   <body>
     <div id="root"></div>
