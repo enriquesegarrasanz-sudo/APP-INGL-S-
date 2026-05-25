@@ -126,7 +126,7 @@ export default function DashboardView({
         </div>
         <button
           onClick={onQuickAdd}
-          className="px-5 py-2.5 text-sm font-bold text-accent bg-surface border border-border-light rounded-xl hover:bg-accent-bg transition-colors cursor-pointer w-fit"
+          className="min-h-[44px] px-5 py-2.5 text-sm font-bold text-accent bg-surface border border-border-light rounded-xl hover:bg-accent-bg active:bg-accent-bg transition-colors cursor-pointer w-fit"
         >
           + Anadir vocabulario
         </button>
@@ -178,7 +178,7 @@ export default function DashboardView({
             key={status}
             type="button"
             onClick={() => onViewChange('library')}
-            className="bg-white border border-border-light rounded-xl p-4 text-center cursor-pointer hover:shadow-md transition-shadow"
+            className="bg-white border border-border-light rounded-xl p-4 text-center cursor-pointer hover:shadow-md active:scale-[0.97] active:shadow-sm transition-all"
           >
             <div
               className="text-2xl font-black"
@@ -229,7 +229,7 @@ export default function DashboardView({
                   <button
                     type="button"
                     onClick={() => onNavigateToBlock(block.label)}
-                    className="flex-1 px-3 py-2 text-sm font-bold text-text-muted bg-surface border border-border-light rounded-lg cursor-pointer hover:border-accent hover:text-accent transition-colors"
+                    className="flex-1 min-h-[44px] px-3 py-2.5 text-sm font-bold text-text-muted bg-surface border border-border-light rounded-lg cursor-pointer hover:border-accent hover:text-accent active:bg-accent-bg active:border-accent active:text-accent transition-colors"
                   >
                     Ver biblioteca
                   </button>
@@ -237,7 +237,7 @@ export default function DashboardView({
                     <button
                       type="button"
                       onClick={() => onStartReview(block.label)}
-                      className="flex-1 px-3 py-2 text-sm font-bold text-white bg-accent border-none rounded-lg cursor-pointer hover:opacity-90 transition-opacity shadow-btn"
+                      className="flex-1 min-h-[44px] px-3 py-2.5 text-sm font-bold text-white bg-accent border-none rounded-lg cursor-pointer hover:opacity-90 active:opacity-75 active:scale-[0.97] transition-all shadow-btn"
                     >
                       Repasar
                     </button>

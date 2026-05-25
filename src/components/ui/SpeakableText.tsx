@@ -98,7 +98,7 @@ export default function SpeakableText({
               <span key={`${token.raw}-${i}`}>
                 <span
                   onClick={(e) => handleClickWord(e, token)}
-                  className={`inline cursor-pointer rounded px-0.5 -mx-0.5 transition-colors duration-150 hover:bg-amber-100 ${
+                  className={`inline cursor-pointer rounded px-1 -mx-0.5 py-1 -my-0.5 transition-colors duration-150 hover:bg-amber-100 active:bg-amber-300 ${
                     activeWordIdx === token.index ? 'bg-amber-200' : ''
                   }`}
                   title="Pronunciar esta palabra"
@@ -114,10 +114,10 @@ export default function SpeakableText({
             type="button"
             onClick={handlePlayPhrase}
             title={`Escuchar frase completa (${TTS_SPEEDS[speed].label})`}
-            className={`inline-flex items-center justify-center ml-2 w-6 h-6 text-[10px] border rounded-full align-middle shrink-0 transition-all cursor-pointer ${
+            className={`inline-flex items-center justify-center ml-2 w-9 h-9 text-xs border rounded-full align-middle shrink-0 transition-all cursor-pointer active:scale-90 ${
               playing
                 ? 'bg-accent text-white border-accent'
-                : 'bg-white text-text-muted border-border-light hover:bg-surface hover:border-accent'
+                : 'bg-white text-text-muted border-border-light hover:bg-surface hover:border-accent active:bg-surface'
             }`}
           >
             {playing ? '■' : '▶'}
@@ -137,10 +137,10 @@ export default function SpeakableText({
             type="button"
             onClick={handlePlayPhrase}
             title={`Escuchar (${TTS_SPEEDS[speed].label})`}
-            className={`inline-flex items-center justify-center w-5 h-5 text-[9px] border rounded-full shrink-0 transition-all cursor-pointer ${
+            className={`inline-flex items-center justify-center w-9 h-9 text-xs border rounded-full shrink-0 transition-all cursor-pointer active:scale-90 ${
               playing
                 ? 'bg-accent text-white border-accent'
-                : 'bg-white text-text-muted border-border-light hover:bg-surface hover:border-accent'
+                : 'bg-white text-text-muted border-border-light hover:bg-surface hover:border-accent active:bg-surface'
             }`}
           >
             {playing ? '■' : '▶'}

@@ -4,6 +4,7 @@ import { THEME_BLOCKS } from '../../types';
 import type { ReviewQuality } from '../../types';
 import { QUALITY_LABELS } from '../../lib/spaced-repetition';
 import SpeakableText from '../ui/SpeakableText';
+import { useSwipe } from '../../hooks/useSwipe';
 
 interface FlashcardViewProps {
   getDueCountForBlock: (blockFilter: string | null) => number;
@@ -33,6 +34,11 @@ export default function FlashcardView({
   const [batchSize, setBatchSize] = useState(10);
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
   const batchOptions = [5, 10, 15, 20];
+
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: !isFlipped ? flipCard : undefined,
+    onSwipeRight: isFlipped ? flipCard : undefined,
+  });
   const selectedDueCount = getDueCountForBlock(selectedBlock);
 
   // State D: Session complete
@@ -89,7 +95,7 @@ export default function FlashcardView({
           </span>
           <button
             onClick={endSession}
-            className="text-sm text-text-muted hover:text-danger cursor-pointer bg-transparent border-none"
+            className="min-h-[44px] px-3 text-sm text-text-muted hover:text-danger active:text-danger cursor-pointer bg-transparent border-none"
           >
             Terminar
           </button>
@@ -104,8 +110,11 @@ export default function FlashcardView({
           />
         </div>
 
-        {/* Card */}
-        <div className="bg-white border border-border-light rounded-2xl shadow-md min-h-[280px] sm:min-h-[340px] flex flex-col items-center justify-center p-5 sm:p-10 text-center">
+        {/* Card — swipe left to flip, swipe right to flip back */}
+        <div
+          className="bg-white border border-border-light rounded-2xl shadow-md min-h-[280px] sm:min-h-[340px] flex flex-col items-center justify-center p-5 sm:p-10 text-center select-none"
+          {...swipeHandlers}
+        >
           {!isFlipped ? (
             <>
               <p className="text-sm text-text-muted mb-4 tracking-wide uppercase">
@@ -149,7 +158,7 @@ export default function FlashcardView({
                 <button
                   key={q}
                   onClick={() => rateCard(q)}
-                  className="flex flex-col items-center gap-1 p-3 rounded-xl border-2 cursor-pointer bg-white hover:shadow-md transition-all text-center"
+                  className="flex flex-col items-center gap-1 p-4 min-h-[60px] rounded-xl border-2 cursor-pointer bg-white hover:shadow-md active:scale-95 transition-all text-center"
                   style={{
                     borderColor: `${info.color}60`,
                     color: info.color,
@@ -212,10 +221,10 @@ export default function FlashcardView({
                 <button
                   key={n}
                   onClick={() => setBatchSize(n)}
-                  className={`px-3 py-1.5 text-sm font-bold rounded-lg border cursor-pointer transition-colors ${
+                  className={`min-h-[44px] px-4 py-2 text-sm font-bold rounded-lg border cursor-pointer transition-colors active:scale-95 ${
                     batchSize === n
                       ? 'bg-accent text-white border-accent shadow-btn'
-                      : 'bg-white text-text-muted border-border-light hover:border-accent'
+                      : 'bg-white text-text-muted border-border-light hover:border-accent active:border-accent active:bg-accent-bg'
                   }`}
                 >
                   {n}

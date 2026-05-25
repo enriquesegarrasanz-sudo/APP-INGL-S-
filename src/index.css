@@ -17,6 +17,15 @@ button:active,
   opacity: 0.75;
 }
 
+/* En dispositivos sin hover (touch), active reemplaza hover como feedback */
+@media (hover: none) {
+  button:active,
+  [role="button"]:active {
+    opacity: 0.65;
+    transform: scale(0.97);
+  }
+}
+
 /* Utilidad para ocultar scrollbar manteniendo scroll funcional */
 .scrollbar-hide {
   -ms-overflow-style: none;

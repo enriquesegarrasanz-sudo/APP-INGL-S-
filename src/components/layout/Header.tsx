@@ -79,10 +79,10 @@ export default function Header({ currentView, onViewChange }: HeaderProps) {
                   key={tab.key}
                   type="button"
                   onClick={() => onViewChange(tab.key)}
-                  className={`px-3 lg:px-4 py-2 text-sm font-bold rounded-lg cursor-pointer border-none transition-all ${
+                  className={`px-3 lg:px-4 py-2 text-sm font-bold rounded-lg cursor-pointer border-none transition-all active:scale-95 ${
                     currentView === tab.key
                       ? 'bg-white text-accent shadow-sm'
-                      : 'bg-transparent text-white/80 hover:bg-white/15 hover:text-white'
+                      : 'bg-transparent text-white/80 hover:bg-white/15 hover:text-white active:bg-white/25 active:text-white'
                   }`}
                 >
                   {tab.label}
@@ -94,10 +94,10 @@ export default function Header({ currentView, onViewChange }: HeaderProps) {
                   key={tab.key}
                   type="button"
                   onClick={() => onViewChange(tab.key)}
-                  className={`px-3 py-2 text-xs font-bold rounded-lg cursor-pointer border-none transition-all ${
+                  className={`px-3 py-2 text-xs font-bold rounded-lg cursor-pointer border-none transition-all active:scale-95 ${
                     currentView === tab.key
                       ? 'bg-white text-accent shadow-sm'
-                      : 'bg-transparent text-white/60 hover:bg-white/15 hover:text-white'
+                      : 'bg-transparent text-white/60 hover:bg-white/15 hover:text-white active:bg-white/25 active:text-white'
                   }`}
                 >
                   {tab.label}
@@ -115,10 +115,10 @@ export default function Header({ currentView, onViewChange }: HeaderProps) {
                 key={tab.key}
                 type="button"
                 onClick={() => onViewChange(tab.key)}
-                className={`shrink-0 px-4 py-2 text-sm font-bold rounded-lg cursor-pointer border-none transition-all ${
+                className={`shrink-0 px-5 py-2.5 text-sm font-bold rounded-lg cursor-pointer border-none transition-all active:scale-95 ${
                   currentView === tab.key
                     ? 'bg-white text-accent shadow-sm'
-                    : 'bg-transparent text-white/80'
+                    : 'bg-transparent text-white/80 active:bg-white/25'
                 }`}
               >
                 {tab.label}
