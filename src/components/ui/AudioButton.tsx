@@ -11,7 +11,7 @@ interface AudioButtonProps {
 }
 
 const SIZES = {
-  sm: { btn: 'w-10 h-10', icon: 16 },
+  sm: { btn: 'w-11 h-11', icon: 16 },
   md: { btn: 'w-14 h-14', icon: 22 },
   lg: { btn: 'w-[72px] h-[72px]', icon: 28 },
 };
@@ -43,10 +43,10 @@ export default function AudioButton({ text, size = 'md', showSpeedControl = fals
         onClick={handlePlay}
         title={playing ? 'Detener' : `Escuchar (${TTS_SPEEDS[speed].label})`}
         aria-label={playing ? 'Detener audio' : `Escuchar ${text}`}
-        className={`${s.btn} flex items-center justify-center rounded-full border-2 shrink-0 transition-all duration-200 cursor-pointer ${
+        className={`${s.btn} flex items-center justify-center rounded-full border-2 shrink-0 transition-all duration-200 cursor-pointer active:scale-90 ${
           playing
             ? 'bg-accent text-white border-accent scale-110 shadow-lg'
-            : 'bg-accent-bg text-accent border-border-light hover:border-accent hover:shadow-sm'
+            : 'bg-accent-bg text-accent border-border-light hover:border-accent hover:shadow-sm active:bg-accent active:text-white active:border-accent'
         }`}
       >
         <svg width={s.icon} height={s.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -70,7 +70,7 @@ export default function AudioButton({ text, size = 'md', showSpeedControl = fals
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); setShowSpeeds(!showSpeeds); }}
-            className="px-3 py-1.5 text-xs font-bold text-text-muted bg-surface border border-border-light rounded-lg hover:border-accent cursor-pointer"
+            className="min-h-[44px] px-4 py-2 text-xs font-bold text-text-muted bg-surface border border-border-light rounded-lg hover:border-accent active:bg-accent-bg cursor-pointer"
           >
             {TTS_SPEEDS[speed].rate}x
           </button>
@@ -81,7 +81,7 @@ export default function AudioButton({ text, size = 'md', showSpeedControl = fals
                   key={key}
                   type="button"
                   onClick={(e) => { e.stopPropagation(); setSpeed(key); setShowSpeeds(false); }}
-                  className={`w-full px-4 py-2 text-left text-sm cursor-pointer hover:bg-surface ${
+                  className={`w-full px-4 py-3 text-left text-sm cursor-pointer hover:bg-surface active:bg-accent-bg ${
                     speed === key ? 'font-bold text-accent bg-accent-bg' : 'text-text-muted'
                   }`}
                 >

@@ -28,7 +28,7 @@ export default function PersonalMapView() {
           </p>
         </div>
 
-        <div className="bg-surface border border-border-light rounded-xl p-5 sm:p-6">
+        <div className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
           <h3 className="text-lg font-black m-0 mb-4">Diagnostico de implementacion</h3>
           <div className="space-y-4">
             <Metric label="Bloques tematicos activos" value={String(THEME_BLOCKS.length)} />
@@ -39,7 +39,7 @@ export default function PersonalMapView() {
         </div>
       </section>
 
-      <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6">
+      <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
           <div>
             <p className="text-xs font-black uppercase tracking-wider text-text-muted mb-2">
@@ -71,7 +71,7 @@ export default function PersonalMapView() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {PRIORITY_FUNCTIONS.map((item) => (
-            <article key={item.id} className="bg-card border border-border-light rounded-xl p-5 shadow-sm">
+            <article key={item.id} className="bg-card border border-border-light rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
               <h4 className="text-lg font-black m-0 mb-2">{item.title}</h4>
               <p className="text-sm text-text-muted leading-relaxed m-0 mb-4">{item.goal}</p>
 
@@ -82,7 +82,7 @@ export default function PersonalMapView() {
                 {item.blocks.map((block) => (
                   <span
                     key={block}
-                    className="text-xs font-semibold text-text-muted bg-surface border border-border-light rounded-lg px-2.5 py-1"
+                    className="text-xs font-semibold text-accent bg-accent-bg border border-border-light rounded-lg px-2.5 py-1"
                   >
                     {block}
                   </span>
@@ -103,7 +103,7 @@ export default function PersonalMapView() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {PERSONAL_THEMES.map((theme) => (
-            <article key={theme.block} className="bg-white border border-border-light rounded-xl p-5">
+            <article key={theme.block} className="bg-white border border-border-light rounded-xl p-5 shadow-sm">
               <div className="flex items-start justify-between gap-4 mb-3">
                 <div>
                   <h4 className="text-lg font-black m-0">{theme.block}</h4>
@@ -128,7 +128,7 @@ export default function PersonalMapView() {
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-5">
-        <div className="bg-white border border-border-light rounded-xl p-5 sm:p-6">
+        <div className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
           <p className="text-xs font-black uppercase tracking-wider text-text-muted mb-2">
             Trampas literales
           </p>
@@ -136,7 +136,7 @@ export default function PersonalMapView() {
 
           <div className="space-y-3">
             {LITERAL_TRAPS.map((trap) => (
-              <div key={trap.spanish} className="border border-border-light rounded-lg p-4">
+              <div key={trap.spanish} className="border border-border-light rounded-lg p-4 bg-surface">
                 <div className="text-sm font-black text-text mb-1">{trap.spanish}</div>
                 <div className="text-sm text-danger mb-1">No: {trap.literal}</div>
                 <div className="text-sm font-bold text-success mb-2">Mejor: {trap.natural}</div>
@@ -147,7 +147,7 @@ export default function PersonalMapView() {
         </div>
 
         <div className="space-y-5">
-          <div className="bg-white border border-border-light rounded-xl p-5 sm:p-6">
+          <div className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
             <p className="text-xs font-black uppercase tracking-wider text-text-muted mb-2">
               Registros
             </p>
@@ -169,7 +169,7 @@ export default function PersonalMapView() {
             </div>
           </div>
 
-          <div className="bg-white border border-border-light rounded-xl p-5 sm:p-6">
+          <div className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
             <p className="text-xs font-black uppercase tracking-wider text-text-muted mb-2">
               Practica recomendada
             </p>
@@ -194,7 +194,7 @@ function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4 border-b border-border-light pb-3 last:border-b-0 last:pb-0">
       <span className="text-sm text-text-muted">{label}</span>
-      <span className="text-2xl font-black text-text">{value}</span>
+      <span className="text-2xl font-black text-accent">{value}</span>
     </div>
   );
 }

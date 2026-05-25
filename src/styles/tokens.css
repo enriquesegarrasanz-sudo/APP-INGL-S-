@@ -3,43 +3,47 @@
   --font-sans: 'Söhne', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
 
-  /* ── Colors ── */
-  --color-bg: #ffffff;
-  --color-surface: #f5f6f8;
-  --color-surface-hover: #eef0f3;
+  /* ── Colors — Pastel warm palette ── */
+  --color-bg: #FFF8F0;
+  --color-surface: #F5F0FA;
+  --color-surface-hover: #EDE6F5;
   --color-card: #ffffff;
-  --color-input-bg: #f9fafb;
+  --color-input-bg: #FAF7FF;
 
-  --color-border: #d1d5db;
-  --color-border-light: #e8eaed;
+  --color-border: #D4CBE5;
+  --color-border-light: #E8E0F0;
 
-  --color-text: #111827;
-  --color-text-muted: #6b7280;
-  --color-text-dim: #9ca3af;
+  --color-text: #2D2240;
+  --color-text-muted: #6E6280;
+  --color-text-dim: #9B90AD;
 
-  --color-accent: #111827;
-  --color-accent-soft: #374151;
-  --color-accent-bg: #f0f1f3;
+  --color-accent: #7C5CFC;
+  --color-accent-soft: #9B82FD;
+  --color-accent-bg: #F0EBFF;
 
-  --color-danger: #ef4444;
-  --color-danger-bg: #fef2f2;
-  --color-success: #10b981;
-  --color-success-bg: #ecfdf5;
-  --color-warning-bg: #fffbeb;
+  --color-accent-secondary: #FF8A6B;
+  --color-accent-secondary-bg: #FFF0EB;
 
-  --color-blue: #3b82f6;
-  --color-blue-bg: #eff6ff;
-  --color-green: #059669;
-  --color-green-bg: #ecfdf5;
+  --color-danger: #F06060;
+  --color-danger-bg: #FFF0F0;
+  --color-success: #34B87A;
+  --color-success-bg: #EEFBF3;
+  --color-warning: #F5A623;
+  --color-warning-bg: #FFF8EB;
 
-  --color-highlight: #dbeafe;
+  --color-blue: #5B8DEF;
+  --color-blue-bg: #EEF3FF;
+  --color-green: #34B87A;
+  --color-green-bg: #EEFBF3;
 
-  /* ── Status colors ── */
-  --color-status-new: #94a3b8;
-  --color-status-learning: #f59e0b;
-  --color-status-active: #10b981;
-  --color-status-mastered: #3b82f6;
-  --color-status-review: #ef4444;
+  --color-highlight: #E8E0FF;
+
+  /* ── Status colors — pastel-friendly ── */
+  --color-status-new: #A8A0BB;
+  --color-status-learning: #F5A623;
+  --color-status-active: #34B87A;
+  --color-status-mastered: #5B8DEF;
+  --color-status-review: #F06060;
 
   /* ── Spacing scale ── */
   --spacing-section: 44px;
@@ -53,12 +57,12 @@
   --radius-2xl: 24px;
   --radius-full: 9999px;
 
-  /* ── Shadows ── */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.08);
-  --shadow-xl: 0 32px 100px rgba(0, 0, 0, 0.22);
-  --shadow-btn: 0 6px 24px rgba(0, 0, 0, 0.14);
+  /* ── Shadows — warm-tinted ── */
+  --shadow-sm: 0 2px 8px rgba(124, 92, 252, 0.06);
+  --shadow-md: 0 8px 32px rgba(124, 92, 252, 0.08);
+  --shadow-lg: 0 10px 40px rgba(124, 92, 252, 0.10);
+  --shadow-xl: 0 32px 100px rgba(124, 92, 252, 0.18);
+  --shadow-btn: 0 6px 24px rgba(124, 92, 252, 0.20);
 }
 
 /* ── Base resets ── */

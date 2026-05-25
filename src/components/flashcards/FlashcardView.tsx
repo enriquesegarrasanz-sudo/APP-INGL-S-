@@ -4,6 +4,7 @@ import { THEME_BLOCKS } from '../../types';
 import type { ReviewQuality } from '../../types';
 import { QUALITY_LABELS } from '../../lib/spaced-repetition';
 import SpeakableText from '../ui/SpeakableText';
+import { useSwipe } from '../../hooks/useSwipe';
 
 interface FlashcardViewProps {
   getDueCountForBlock: (blockFilter: string | null) => number;
@@ -33,6 +34,11 @@ export default function FlashcardView({
   const [batchSize, setBatchSize] = useState(10);
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
   const batchOptions = [5, 10, 15, 20];
+
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: !isFlipped ? flipCard : undefined,
+    onSwipeRight: isFlipped ? flipCard : undefined,
+  });
   const selectedDueCount = getDueCountForBlock(selectedBlock);
 
   // State D: Session complete
@@ -52,15 +58,15 @@ export default function FlashcardView({
         </p>
 
         <div className="grid grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-10">
-          <div className="bg-surface rounded-xl p-4 sm:p-6">
-            <div className="text-2xl sm:text-3xl font-black">{reviewed}</div>
+          <div className="bg-accent-bg rounded-xl p-4 sm:p-6 border border-border-light">
+            <div className="text-2xl sm:text-3xl font-black text-accent">{reviewed}</div>
             <div className="text-sm text-text-muted mt-1">Tarjetas</div>
           </div>
-          <div className="bg-success-bg rounded-xl p-4 sm:p-6">
+          <div className="bg-success-bg rounded-xl p-4 sm:p-6 border border-border-light">
             <div className="text-2xl sm:text-3xl font-black text-success">{correct}</div>
             <div className="text-sm text-text-muted mt-1">Correctas</div>
           </div>
-          <div className="rounded-xl p-4 sm:p-6" style={{ background: pct >= 70 ? 'var(--color-success-bg)' : 'var(--color-warning-bg)' }}>
+          <div className="rounded-xl p-4 sm:p-6 border border-border-light" style={{ background: pct >= 70 ? 'var(--color-success-bg)' : 'var(--color-warning-bg)' }}>
             <div className="text-2xl sm:text-3xl font-black">{pct}%</div>
             <div className="text-sm text-text-muted mt-1">Acierto</div>
           </div>
@@ -68,7 +74,7 @@ export default function FlashcardView({
 
         <button
           onClick={endSession}
-          className="px-8 py-3 bg-accent text-white rounded-xl font-bold text-lg cursor-pointer border-none hover:opacity-90 transition-opacity"
+          className="px-8 py-3 bg-accent text-white rounded-xl font-bold text-lg cursor-pointer border-none hover:opacity-90 transition-opacity shadow-btn"
         >
           Volver
         </button>
@@ -89,22 +95,27 @@ export default function FlashcardView({
           </span>
           <button
             onClick={endSession}
-            className="text-sm text-text-muted hover:text-danger cursor-pointer bg-transparent border-none"
+            className="min-h-[44px] px-3 text-sm text-text-muted hover:text-danger active:text-danger cursor-pointer bg-transparent border-none"
           >
             Terminar
           </button>
         </div>
-        <div className="w-full h-2 bg-surface rounded-full mb-8 overflow-hidden">
+        <div className="w-full h-2.5 bg-accent-bg rounded-full mb-8 overflow-hidden">
           <div
-            className="h-full bg-accent rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
+            className="h-full rounded-full transition-all duration-300"
+            style={{
+              width: `${progress}%`,
+              background: 'linear-gradient(90deg, #7C5CFC, #FF8A6B)',
+            }}
           />
         </div>
 
-        {/* Card */}
-        <div className="bg-white border border-border-light rounded-2xl shadow-sm min-h-[280px] sm:min-h-[340px] flex flex-col items-center justify-center p-5 sm:p-10 text-center">
+        {/* Card — swipe left to flip, swipe right to flip back */}
+        <div
+          className="bg-white border border-border-light rounded-2xl shadow-md min-h-[280px] sm:min-h-[340px] flex flex-col items-center justify-center p-5 sm:p-10 text-center select-none"
+          {...swipeHandlers}
+        >
           {!isFlipped ? (
-            /* State B: Not flipped - Spanish side */
             <>
               <p className="text-sm text-text-muted mb-4 tracking-wide uppercase">
                 Intenta decirlo en ingl&eacute;s...
@@ -114,13 +125,12 @@ export default function FlashcardView({
               </h2>
               <button
                 onClick={flipCard}
-                className="px-10 py-4 bg-accent text-white rounded-xl font-bold text-lg cursor-pointer border-none hover:opacity-90 transition-opacity"
+                className="px-10 py-4 bg-accent text-white rounded-xl font-bold text-lg cursor-pointer border-none hover:opacity-90 transition-opacity shadow-btn"
               >
                 Mostrar respuesta
               </button>
             </>
           ) : (
-            /* State C: Flipped - both sides */
             <>
               <p className="text-text-muted text-lg mb-2">
                 {currentCard.spanish_source}
@@ -131,19 +141,10 @@ export default function FlashcardView({
                 stress={currentCard.stress}
                 note={currentCard.pronunciation_note}
                 showWords
+                showGuide
                 className="mb-6"
-                phraseClassName="text-3xl font-black leading-snug"
+                phraseClassName="text-2xl sm:text-3xl font-black leading-snug"
               />
-
-              {/* Pronunciation details */}
-              <div className="flex flex-col items-center gap-2 mb-6">
-                <code className="text-lg px-4 py-1.5 bg-surface rounded-lg font-mono">
-                  {currentCard.pronunciation_es}
-                </code>
-                <span className="text-2xl font-black tracking-wide">
-                  {currentCard.stress}
-                </span>
-              </div>
             </>
           )}
         </div>
@@ -157,10 +158,11 @@ export default function FlashcardView({
                 <button
                   key={q}
                   onClick={() => rateCard(q)}
-                  className="flex flex-col items-center gap-1 p-3 rounded-xl border-2 border-border-light cursor-pointer bg-white hover:shadow-md transition-all text-center"
+                  className="flex flex-col items-center gap-1 p-4 min-h-[60px] rounded-xl border-2 cursor-pointer bg-white hover:shadow-md active:scale-95 transition-all text-center"
                   style={{
-                    borderColor: info.color,
+                    borderColor: `${info.color}60`,
                     color: info.color,
+                    backgroundColor: `${info.color}08`,
                   }}
                 >
                   <span className="text-lg font-black">{info.label}</span>
@@ -184,8 +186,8 @@ export default function FlashcardView({
         Sistema SM-2 &mdash; el mismo algoritmo que Anki
       </p>
 
-      <div className="bg-white border border-border-light rounded-2xl p-6 sm:p-10 mb-6 sm:mb-8 shadow-sm">
-        <div className="text-6xl font-black mb-2">{selectedDueCount}</div>
+      <div className="bg-white border border-border-light rounded-2xl p-6 sm:p-10 mb-6 sm:mb-8 shadow-md">
+        <div className="text-6xl font-black text-accent mb-2">{selectedDueCount}</div>
         <div className="text-text-muted text-lg">
           {selectedDueCount === 1 ? 'tarjeta pendiente' : 'tarjetas pendientes'}
         </div>
@@ -219,10 +221,10 @@ export default function FlashcardView({
                 <button
                   key={n}
                   onClick={() => setBatchSize(n)}
-                  className={`px-3 py-1.5 text-sm font-bold rounded-lg border cursor-pointer transition-colors ${
+                  className={`min-h-[44px] px-4 py-2 text-sm font-bold rounded-lg border cursor-pointer transition-colors active:scale-95 ${
                     batchSize === n
-                      ? 'bg-accent text-white border-accent'
-                      : 'bg-white text-text-muted border-border-light hover:border-accent'
+                      ? 'bg-accent text-white border-accent shadow-btn'
+                      : 'bg-white text-text-muted border-border-light hover:border-accent active:border-accent active:bg-accent-bg'
                   }`}
                 >
                   {n}
@@ -234,7 +236,7 @@ export default function FlashcardView({
 
           <button
             onClick={() => startSession(batchSize, selectedBlock)}
-            className="px-12 py-4 bg-accent text-white rounded-xl font-bold text-xl cursor-pointer border-none hover:opacity-90 transition-opacity"
+            className="px-12 py-4 bg-accent text-white rounded-xl font-bold text-xl cursor-pointer border-none hover:opacity-90 transition-opacity shadow-btn"
           >
             Empezar repaso
           </button>

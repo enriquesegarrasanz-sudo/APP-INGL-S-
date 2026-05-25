@@ -50,7 +50,7 @@ export default function ExpressionCard({
     >
       <div
         onClick={onToggle}
-        className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 cursor-pointer text-left"
+        className="w-full flex items-center gap-3 px-4 sm:px-5 py-4 cursor-pointer text-left active:bg-surface/60 transition-colors rounded-xl"
       >
         <span
           className="w-3 h-3 rounded-full shrink-0"
@@ -61,9 +61,8 @@ export default function ExpressionCard({
           <SpeakableText
             text={expr.english}
             pronunciation={expr.pronunciation_es}
-            stress={expr.stress}
-            note={expr.pronunciation_note}
             showGuide={false}
+            showWords={false}
             className="min-w-0"
             phraseClassName="block max-w-full truncate text-sm sm:text-lg font-bold text-text leading-snug"
           />
@@ -114,8 +113,8 @@ export default function ExpressionCard({
               <p className="text-sm text-text">{expr.register}</p>
             </div>
 
-            <div>
-              <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">
+            <div className="md:col-span-2">
+              <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-2">
                 Pronunciacion
               </p>
               <SpeakableText
@@ -124,15 +123,9 @@ export default function ExpressionCard({
                 stress={expr.stress}
                 note={expr.pronunciation_note}
                 showWords
-                phraseClassName="text-sm sm:text-base font-bold text-text"
+                showGuide
+                phraseClassName="text-base sm:text-lg font-bold text-text"
               />
-            </div>
-
-            <div>
-              <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">
-                Acento / Stress
-              </p>
-              <p className="text-xl font-black text-text">{expr.stress}</p>
             </div>
           </div>
 
@@ -222,7 +215,7 @@ export default function ExpressionCard({
                     key={relatedExpression.id}
                     type="button"
                     onClick={() => onNavigateToExpression(relatedExpression.id)}
-                    className="px-3 py-1.5 text-sm font-semibold text-accent bg-accent-bg border border-border-light rounded-full hover:border-accent transition-colors cursor-pointer"
+                    className="min-h-[44px] px-4 py-2.5 text-sm font-semibold text-accent bg-accent-bg border border-border-light rounded-full hover:border-accent active:border-accent active:bg-accent/10 transition-colors cursor-pointer"
                   >
                     {relatedExpression.english}
                   </button>
@@ -234,7 +227,7 @@ export default function ExpressionCard({
           <div className="flex items-center gap-3 pt-4 border-t border-border-light">
             <button
               onClick={onEdit}
-              className="px-4 py-2 text-sm font-semibold text-accent bg-surface border border-border-light rounded-lg hover:bg-accent-bg transition-colors cursor-pointer"
+              className="min-h-[44px] px-4 py-2.5 text-sm font-semibold text-accent bg-surface border border-border-light rounded-lg hover:bg-accent-bg active:bg-accent-bg transition-colors cursor-pointer"
             >
               Editar
             </button>
@@ -256,7 +249,7 @@ export default function ExpressionCard({
 
             <button
               onClick={onDelete}
-              className="ml-auto px-4 py-2 text-sm font-semibold text-danger bg-danger-bg border border-border-light rounded-lg hover:bg-danger/10 transition-colors cursor-pointer"
+              className="ml-auto min-h-[44px] px-4 py-2.5 text-sm font-semibold text-danger bg-danger-bg border border-border-light rounded-lg hover:bg-danger/10 active:bg-danger/20 transition-colors cursor-pointer"
             >
               Eliminar
             </button>

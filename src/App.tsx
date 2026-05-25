@@ -5,21 +5,25 @@ import { useExpressions } from './hooks/useExpressions';
 import { useReview } from './hooks/useReview';
 import { AudioSettingsProvider } from './context/AudioSettingsContext';
 
+import ErrorBoundary from './components/ui/ErrorBoundary';
 import Header from './components/layout/Header';
 import Toast from './components/ui/Toast';
+import DashboardView from './components/dashboard/DashboardView';
 import ThemesView from './components/themes/ThemesView';
 import PersonalMapView from './components/map/PersonalMapView';
 import LibraryView from './components/library/LibraryView';
 import QuickAddModal from './components/library/QuickAddModal';
 import ExpressionEditor from './components/library/ExpressionEditor';
 import FlashcardView from './components/flashcards/FlashcardView';
+import StatsView from './components/stats/StatsView';
 import SettingsView from './components/settings/SettingsView';
+import ConversationsView from './components/conversations/ConversationsView';
 
 export default function App() {
   const { expressions, addExpression, updateExpression, deleteExpression, updateStatus, importData } = useExpressions();
   const review = useReview(expressions);
 
-  const [view, setView] = useState('themes');
+  const [view, setView] = useState('dashboard');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterBlock, setFilterBlock] = useState<string>('all');
   const [filterContext, setFilterContext] = useState('all');
@@ -98,7 +102,20 @@ export default function App() {
     }, 50);
   }, []);
 
+  const handleStartReview = useCallback((blockFilter?: string | null) => {
+    setView('flashcards');
+    if (blockFilter) {
+      review.startSession(10, blockFilter);
+    }
+  }, [review]);
+
+  const handleStartBlockReview = useCallback((blockLabel: string) => {
+    setView('flashcards');
+    review.startSession(10, blockLabel);
+  }, [review]);
+
   return (
+    <ErrorBoundary>
     <AudioSettingsProvider>
     <div className="min-h-screen bg-bg text-text font-sans">
       {toast && <Toast message={toast} onClose={() => setToast('')} />}
@@ -106,10 +123,21 @@ export default function App() {
       <Header currentView={view} onViewChange={setView} />
 
       <main className="px-4 sm:px-6 md:px-10 py-6 md:py-10 max-w-[1280px] mx-auto">
+        {view === 'dashboard' && (
+          <DashboardView
+            expressions={expressions}
+            onStartReview={handleStartReview}
+            onNavigateToBlock={handleNavigateToBlock}
+            onQuickAdd={() => setShowQuickAdd(true)}
+            onViewChange={setView}
+          />
+        )}
+
         {view === 'themes' && (
           <ThemesView
             expressions={expressions}
             onNavigateToBlock={handleNavigateToBlock}
+            onStartBlockReview={handleStartBlockReview}
           />
         )}
 
@@ -163,6 +191,12 @@ export default function App() {
           />
         )}
 
+        {view === 'stats' && (
+          <StatsView expressions={expressions} />
+        )}
+
+        {view === 'conversations' && <ConversationsView />}
+
         {view === 'settings' && (
           <SettingsView
             expressions={expressions}
@@ -192,5 +226,6 @@ export default function App() {
       )}
     </div>
     </AudioSettingsProvider>
+    </ErrorBoundary>
   );
 }

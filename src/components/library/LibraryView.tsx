@@ -118,7 +118,7 @@ export default function LibraryView({
           </button>
           <button
             onClick={onNew}
-            className="px-5 py-2.5 text-sm font-bold text-white bg-accent border-none rounded-xl shadow-btn hover:opacity-90 transition-opacity cursor-pointer"
+            className="px-5 py-2.5 text-sm font-bold text-white bg-accent border-none rounded-xl shadow-btn hover:opacity-90 transition-all cursor-pointer"
           >
             Editor completo
           </button>
