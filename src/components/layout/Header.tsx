@@ -8,10 +8,15 @@ interface HeaderProps {
 }
 
 const TABS = [
+  { key: 'dashboard', label: 'Hoy' },
   { key: 'themes', label: 'Temas' },
-  { key: 'map', label: 'Mapa' },
   { key: 'library', label: 'Biblioteca' },
   { key: 'flashcards', label: 'Repaso' },
+  { key: 'stats', label: 'Progreso' },
+];
+
+const SECONDARY_TABS = [
+  { key: 'map', label: 'Mapa' },
   { key: 'settings', label: 'Ajustes' },
 ];
 
@@ -83,6 +88,21 @@ export default function Header({ currentView, onViewChange }: HeaderProps) {
                   {tab.label}
                 </button>
               ))}
+              <span className="w-px h-5 bg-white/20 mx-1" />
+              {SECONDARY_TABS.map((tab) => (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => onViewChange(tab.key)}
+                  className={`px-3 py-2 text-xs font-bold rounded-lg cursor-pointer border-none transition-all ${
+                    currentView === tab.key
+                      ? 'bg-white text-accent shadow-sm'
+                      : 'bg-transparent text-white/60 hover:bg-white/15 hover:text-white'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </nav>
             {audioControls('tts-speed-desktop')}
           </div>
@@ -90,7 +110,7 @@ export default function Header({ currentView, onViewChange }: HeaderProps) {
 
         <div className="md:hidden overflow-x-auto scrollbar-hide">
           <div className="flex gap-1 pb-2">
-            {TABS.map((tab) => (
+            {[...TABS, ...SECONDARY_TABS].map((tab) => (
               <button
                 key={tab.key}
                 type="button"

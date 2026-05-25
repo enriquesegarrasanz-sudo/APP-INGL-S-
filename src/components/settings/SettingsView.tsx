@@ -45,7 +45,6 @@ export default function SettingsView({
   const { preference, setPreference, ollamaStatus, deepseekStatus, refreshServices } = useAIPreference();
 
   const activeCount = expressions.filter((expression) => expression.status === 'active').length;
-  const learningCount = expressions.filter((expression) => expression.status === 'learning').length;
   const masteredCount = expressions.filter((expression) => expression.status === 'mastered').length;
   const cloudConfigured = isCloudConfigured();
   const cloudSyncStatus = getCloudSyncStatus();
@@ -222,12 +221,20 @@ export default function SettingsView({
         </section>
 
         <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
-          <h3 className="text-lg font-bold mb-4">Estadisticas</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <StatCard label="Total" value={expressions.length} />
-            <StatCard label={STATUS_LABELS.active} value={activeCount} color="var(--color-status-active)" bgColor="var(--color-success-bg)" />
-            <StatCard label={STATUS_LABELS.learning} value={learningCount} color="var(--color-status-learning)" bgColor="var(--color-warning-bg)" />
-            <StatCard label={STATUS_LABELS.mastered} value={masteredCount} color="var(--color-status-mastered)" bgColor="var(--color-blue-bg)" />
+          <h3 className="text-lg font-bold mb-3">Resumen rapido</h3>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-xl p-4 text-center border border-border-light" style={{ backgroundColor: 'var(--color-surface)' }}>
+              <div className="text-2xl font-black">{expressions.length}</div>
+              <div className="text-xs text-text-muted mt-1 font-semibold">Total</div>
+            </div>
+            <div className="rounded-xl p-4 text-center border border-border-light" style={{ backgroundColor: 'var(--color-success-bg)' }}>
+              <div className="text-2xl font-black" style={{ color: 'var(--color-status-active)' }}>{activeCount}</div>
+              <div className="text-xs text-text-muted mt-1 font-semibold">{STATUS_LABELS.active}</div>
+            </div>
+            <div className="rounded-xl p-4 text-center border border-border-light" style={{ backgroundColor: 'var(--color-blue-bg)' }}>
+              <div className="text-2xl font-black" style={{ color: 'var(--color-status-mastered)' }}>{masteredCount}</div>
+              <div className="text-xs text-text-muted mt-1 font-semibold">{STATUS_LABELS.mastered}</div>
+            </div>
           </div>
         </section>
       </div>
@@ -260,26 +267,3 @@ function ServiceStatus({
   );
 }
 
-function StatCard({
-  label,
-  value,
-  color,
-  bgColor,
-}: {
-  label: string;
-  value: number;
-  color?: string;
-  bgColor?: string;
-}) {
-  return (
-    <div
-      className="rounded-xl p-4 text-center border border-border-light"
-      style={{ backgroundColor: bgColor || 'var(--color-surface)' }}
-    >
-      <div className="text-2xl font-black" style={color ? { color } : undefined}>
-        {value}
-      </div>
-      <div className="text-xs text-text-muted mt-1 font-semibold">{label}</div>
-    </div>
-  );
-}
