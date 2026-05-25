@@ -17,6 +17,7 @@ import ExpressionEditor from './components/library/ExpressionEditor';
 import FlashcardView from './components/flashcards/FlashcardView';
 import StatsView from './components/stats/StatsView';
 import SettingsView from './components/settings/SettingsView';
+import ConversationsView from './components/conversations/ConversationsView';
 
 export default function App() {
   const { expressions, addExpression, updateExpression, deleteExpression, updateStatus, importData } = useExpressions();
@@ -193,6 +194,8 @@ export default function App() {
         {view === 'stats' && (
           <StatsView expressions={expressions} />
         )}
+
+        {view === 'conversations' && <ConversationsView />}
 
         {view === 'settings' && (
           <SettingsView

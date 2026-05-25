@@ -10,6 +10,7 @@ interface HeaderProps {
 const TABS = [
   { key: 'dashboard', label: 'Hoy' },
   { key: 'themes', label: 'Temas' },
+  { key: 'conversations', label: 'Conversar' },
   { key: 'library', label: 'Biblioteca' },
   { key: 'flashcards', label: 'Repaso' },
   { key: 'stats', label: 'Progreso' },
