@@ -79,7 +79,7 @@ export default function Header({ currentView, onViewChange }: HeaderProps) {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             <nav className="flex gap-1">
               {TABS.map((tab) => (
                 <button
@@ -115,7 +115,7 @@ export default function Header({ currentView, onViewChange }: HeaderProps) {
           </div>
         </div>
 
-        <div className="md:hidden overflow-x-auto scrollbar-hide">
+        <div className="lg:hidden overflow-x-auto scrollbar-hide">
           <div className="flex gap-1 pb-2">
             {[...TABS, ...SECONDARY_TABS].map((tab) => (
               <button
