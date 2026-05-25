@@ -282,7 +282,7 @@ export const INITIAL_EXPRESSIONS: Expression[] = seedRows.map(
     meaning,
     pronunciation_es,
     stress,
-    pronunciation_note: `Pronunciacion aproximada para hispanohablantes: ${pronunciation_es}. Prioriza ${stress}.`,
+    pronunciation_note: '',
     register,
     contexts: buildContexts(blocks),
     blocks: [...blocks],

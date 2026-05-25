@@ -20,8 +20,8 @@ interface SettingsViewProps {
 const AI_OPTIONS: { value: AIPreference; title: string; description: string }[] = [
   {
     value: 'auto',
-    title: 'Automático',
-    description: 'Prueba Ollama y usa DeepSeek si no está disponible.',
+    title: 'Automatico',
+    description: 'Prueba Ollama y usa DeepSeek si no esta disponible.',
   },
   {
     value: 'ollama',
@@ -64,7 +64,7 @@ export default function SettingsView({
     const active = expressions.filter((expression) => expression.status === 'active');
     const lines = active.map(
       (expression) =>
-        `### ${expression.english}\n- **Fuente:** ${expression.spanish_source}\n- **Significado:** ${expression.meaning}\n- **Pronunciación:** \`${expression.pronunciation_es}\` (**${expression.stress}**)\n- **Registro:** ${expression.register}\n- **Contextos:** ${expression.contexts.join(', ')}\n- **Ejemplos:** ${expression.examples.join('; ')}\n- **Error común:** ${expression.common_mistake}\n`
+        `### ${expression.english}\n- **Fuente:** ${expression.spanish_source}\n- **Significado:** ${expression.meaning}\n- **Pronunciacion:** \`${expression.pronunciation_es}\` (**${expression.stress}**)\n- **Registro:** ${expression.register}\n- **Contextos:** ${expression.contexts.join(', ')}\n- **Ejemplos:** ${expression.examples.join('; ')}\n- **Error comun:** ${expression.common_mistake}\n`
     );
     const markdown = `# Sparring English — Expresiones activas\n\n${lines.join('\n---\n\n')}`;
     downloadFile(markdown, `sparring-active-${new Date().toISOString().slice(0, 10)}.md`, 'text/markdown');
@@ -99,7 +99,7 @@ export default function SettingsView({
         copyText('No se pudo sincronizar', 'Error');
       }
     } catch {
-      copyText('Error de sincronización', 'Error');
+      copyText('Error de sincronizacion', 'Error');
     } finally {
       setSyncing(false);
     }
@@ -110,17 +110,17 @@ export default function SettingsView({
       <div className="mb-8">
         <h2 className="text-3xl font-black mb-2">Ajustes</h2>
         <p className="text-sm text-text-muted m-0">
-          Configuración de IA, sincronización y copias de seguridad.
+          Configuracion de IA, sincronizacion y copias de seguridad.
         </p>
       </div>
 
       <div className="flex flex-col gap-6">
-        <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6">
+        <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
             <div className="flex flex-col gap-2">
               <h3 className="text-lg font-bold m-0">Inteligencia Artificial</h3>
               <div className="flex flex-wrap gap-4">
-                <ServiceStatus label="Ollama" status={ollamaStatus} availableText="Conectado" unavailableText="Sin conexión local" />
+                <ServiceStatus label="Ollama" status={ollamaStatus} availableText="Conectado" unavailableText="Sin conexion local" />
                 <ServiceStatus label="DeepSeek" status={deepseekStatus} availableText="API conectada" unavailableText="API key no cargada" />
               </div>
             </div>
@@ -139,10 +139,10 @@ export default function SettingsView({
                 key={option.value}
                 type="button"
                 onClick={() => setPreference(option.value)}
-                className={`text-left p-4 rounded-xl border-2 cursor-pointer transition-colors ${
+                className={`text-left p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   preference === option.value
-                    ? 'border-accent bg-accent-bg'
-                    : 'border-border-light bg-white hover:border-accent'
+                    ? 'border-accent bg-accent-bg shadow-sm'
+                    : 'border-border-light bg-white hover:border-accent-soft'
                 }`}
               >
                 <span className="block text-sm font-black mb-1">{option.title}</span>
@@ -152,8 +152,8 @@ export default function SettingsView({
           </div>
         </section>
 
-        <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6">
-          <h3 className="text-lg font-bold mb-4">Sincronización</h3>
+        <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
+          <h3 className="text-lg font-bold mb-4">Sincronizacion</h3>
           {cloudConfigured ? (
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
@@ -162,7 +162,7 @@ export default function SettingsView({
                   <span className="text-sm font-semibold text-success">Google Apps Script configurado</span>
                 </div>
                 <span className="text-sm text-text-muted">
-                  Última sincronización: {formatDate(lastSync)}
+                  Ultima sincronizacion: {formatDate(lastSync)}
                 </span>
               </div>
               <button
@@ -177,20 +177,20 @@ export default function SettingsView({
             <div className="flex items-start gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-text-dim inline-block mt-1.5" />
               <span className="text-sm text-text-muted leading-relaxed">
-                Copia local activa. Google Sheets está configurado, pero la sincronización queda desactivada hasta cerrar la implementación.
+                Copia local activa. Google Sheets esta configurado, pero la sincronizacion queda desactivada hasta cerrar la implementacion.
               </span>
             </div>
           ) : (
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-text-dim inline-block" />
               <span className="text-sm text-text-muted">
-                Google Sheets pendiente. Define <code className="text-xs bg-surface px-2 py-0.5 rounded">VITE_GOOGLE_SCRIPT_URL</code> cuando la sincronización esté lista.
+                Google Sheets pendiente. Define <code className="text-xs bg-surface px-2 py-0.5 rounded">VITE_GOOGLE_SCRIPT_URL</code> cuando la sincronizacion este lista.
               </span>
             </div>
           )}
         </section>
 
-        <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6">
+        <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
           <h3 className="text-lg font-bold mb-4">Datos</h3>
           <div className="flex flex-wrap gap-3">
             <button
@@ -221,13 +221,13 @@ export default function SettingsView({
           />
         </section>
 
-        <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6">
-          <h3 className="text-lg font-bold mb-4">Estadísticas</h3>
+        <section className="bg-white border border-border-light rounded-xl p-5 sm:p-6 shadow-sm">
+          <h3 className="text-lg font-bold mb-4">Estadisticas</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <StatCard label="Total" value={expressions.length} />
-            <StatCard label={STATUS_LABELS.active} value={activeCount} color="var(--color-status-active)" />
-            <StatCard label={STATUS_LABELS.learning} value={learningCount} color="var(--color-status-learning)" />
-            <StatCard label={STATUS_LABELS.mastered} value={masteredCount} color="var(--color-status-mastered)" />
+            <StatCard label={STATUS_LABELS.active} value={activeCount} color="var(--color-status-active)" bgColor="var(--color-success-bg)" />
+            <StatCard label={STATUS_LABELS.learning} value={learningCount} color="var(--color-status-learning)" bgColor="var(--color-warning-bg)" />
+            <StatCard label={STATUS_LABELS.mastered} value={masteredCount} color="var(--color-status-mastered)" bgColor="var(--color-blue-bg)" />
           </div>
         </section>
       </div>
@@ -264,13 +264,18 @@ function StatCard({
   label,
   value,
   color,
+  bgColor,
 }: {
   label: string;
   value: number;
   color?: string;
+  bgColor?: string;
 }) {
   return (
-    <div className="bg-surface rounded-xl p-4 text-center">
+    <div
+      className="rounded-xl p-4 text-center border border-border-light"
+      style={{ backgroundColor: bgColor || 'var(--color-surface)' }}
+    >
       <div className="text-2xl font-black" style={color ? { color } : undefined}>
         {value}
       </div>

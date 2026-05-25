@@ -61,9 +61,8 @@ export default function ExpressionCard({
           <SpeakableText
             text={expr.english}
             pronunciation={expr.pronunciation_es}
-            stress={expr.stress}
-            note={expr.pronunciation_note}
             showGuide={false}
+            showWords={false}
             className="min-w-0"
             phraseClassName="block max-w-full truncate text-sm sm:text-lg font-bold text-text leading-snug"
           />
@@ -114,8 +113,8 @@ export default function ExpressionCard({
               <p className="text-sm text-text">{expr.register}</p>
             </div>
 
-            <div>
-              <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">
+            <div className="md:col-span-2">
+              <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-2">
                 Pronunciacion
               </p>
               <SpeakableText
@@ -124,15 +123,9 @@ export default function ExpressionCard({
                 stress={expr.stress}
                 note={expr.pronunciation_note}
                 showWords
-                phraseClassName="text-sm sm:text-base font-bold text-text"
+                showGuide
+                phraseClassName="text-base sm:text-lg font-bold text-text"
               />
-            </div>
-
-            <div>
-              <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">
-                Acento / Stress
-              </p>
-              <p className="text-xl font-black text-text">{expr.stress}</p>
             </div>
           </div>
 

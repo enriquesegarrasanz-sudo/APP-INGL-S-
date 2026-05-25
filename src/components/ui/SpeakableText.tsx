@@ -1,7 +1,6 @@
-import { useMemo, useState } from 'react';
-import type { MouseEvent } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { TTS_SPEEDS } from '../../types';
-import { speak } from '../../lib/tts';
+import { speak, speakWord, stopSpeaking } from '../../lib/tts';
 import { useAudioSettings } from '../../context/audioSettings';
 
 interface SpeakableTextProps {
@@ -15,42 +14,25 @@ interface SpeakableTextProps {
   showGuide?: boolean;
 }
 
-type ActiveGuide = {
-  kind: 'phrase' | 'word';
-  text: string;
-  pronunciation: string;
-};
-
-interface Token {
+interface WordToken {
   raw: string;
-  speakText: string;
-  wordIndex: number | null;
+  clean: string;
+  index: number;
 }
 
-function getTokens(text: string): Token[] {
-  let wordIndex = 0;
+function tokenize(text: string): WordToken[] {
+  const tokens: WordToken[] = [];
+  let idx = 0;
 
-  return text.split(/(\s+)/).map((raw) => {
-    const speakText = raw.replace(/^[^A-Za-z0-9']+|[^A-Za-z0-9']+$/g, '');
-    if (!/[A-Za-z0-9]/.test(speakText)) {
-      return { raw, speakText: '', wordIndex: null };
-    }
+  const parts = text.split(/(\s+)/);
+  for (const part of parts) {
+    if (/^\s+$/.test(part)) continue;
+    const clean = part.replace(/^[^A-Za-z0-9']+|[^A-Za-z0-9']+$/g, '');
+    tokens.push({ raw: part, clean, index: idx });
+    idx++;
+  }
 
-    const token = { raw, speakText, wordIndex };
-    wordIndex += 1;
-    return token;
-  });
-}
-
-function getPronunciationForWord(pronunciation: string | undefined, wordIndex: number): string {
-  if (!pronunciation) return '';
-
-  const parts = pronunciation
-    .split(/\s+/)
-    .map((part) => part.trim())
-    .filter(Boolean);
-
-  return parts[wordIndex] ?? pronunciation;
+  return tokens;
 }
 
 export default function SpeakableText({
@@ -64,100 +46,131 @@ export default function SpeakableText({
   showGuide = true,
 }: SpeakableTextProps) {
   const { speed, showPronunciationGuide } = useAudioSettings();
-  const [activeGuide, setActiveGuide] = useState<ActiveGuide | null>(null);
-  const tokens = useMemo(() => getTokens(text), [text]);
+  const [activeWordIdx, setActiveWordIdx] = useState<number | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const tokens = useMemo(() => tokenize(text), [text]);
 
-  const guideVisible = showGuide && showPronunciationGuide && activeGuide !== null;
+  const handlePlayPhrase = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (playing) {
+        stopSpeaking();
+        setPlaying(false);
+        return;
+      }
+      setPlaying(true);
+      setActiveWordIdx(null);
+      speak(text, speed)
+        .then(() => setPlaying(false))
+        .catch(() => setPlaying(false));
+    },
+    [text, speed, playing]
+  );
 
-  const handleSpeak = (
-    event: MouseEvent<HTMLButtonElement>,
-    spokenText: string,
-    nextGuide: ActiveGuide
-  ) => {
-    event.stopPropagation();
-    setActiveGuide(nextGuide);
-    speak(spokenText, speed).catch(() => undefined);
-  };
+  const handleClickWord = useCallback(
+    (e: React.MouseEvent, token: WordToken) => {
+      e.stopPropagation();
+      if (token.clean.length === 0) return;
+      setActiveWordIdx(token.index);
+      setPlaying(true);
+      speakWord(token.clean, speed)
+        .then(() => {
+          setPlaying(false);
+          setTimeout(() => setActiveWordIdx(null), 600);
+        })
+        .catch(() => {
+          setPlaying(false);
+          setActiveWordIdx(null);
+        });
+    },
+    [speed]
+  );
+
+  const showPhonetics = showGuide && showPronunciationGuide && pronunciation;
 
   return (
     <div className={className}>
-      <button
-        type="button"
-        data-speakable-kind="phrase"
-        onClick={(event) =>
-          handleSpeak(event, text, {
-            kind: 'phrase',
-            text,
-            pronunciation,
-          })
-        }
-        title={`Escuchar a velocidad ${TTS_SPEEDS[speed].label.toLowerCase()}`}
-        className={`inline text-left bg-transparent border-none p-0 cursor-pointer hover:text-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${phraseClassName}`}
-      >
-        {text}
-      </button>
-
-      {showWords && (
-        <div className="flex flex-wrap items-center gap-1.5 mt-3">
-          {tokens.map((token, index) => {
-            if (token.wordIndex === null) {
-              return (
-                <span key={`${token.raw}-${index}`} className="text-text-muted">
+      {/* Inline words — clickable like Kensington */}
+      {showWords ? (
+        <div className="leading-relaxed">
+          <span className={`inline ${phraseClassName}`}>
+            {tokens.map((token, i) => (
+              <span key={`${token.raw}-${i}`}>
+                <span
+                  onClick={(e) => handleClickWord(e, token)}
+                  className={`inline cursor-pointer rounded px-0.5 -mx-0.5 transition-colors duration-150 hover:bg-amber-100 ${
+                    activeWordIdx === token.index ? 'bg-amber-200' : ''
+                  }`}
+                  title="Pronunciar esta palabra"
+                >
                   {token.raw}
                 </span>
-              );
-            }
+                {i < tokens.length - 1 && ' '}
+              </span>
+            ))}
+          </span>
 
-            return (
-              <button
-                key={`${token.raw}-${index}`}
-                type="button"
-                data-speakable-kind="word"
-                onClick={(event) =>
-                  handleSpeak(event, token.speakText, {
-                    kind: 'word',
-                    text: token.speakText,
-                    pronunciation: getPronunciationForWord(
-                      pronunciation,
-                      token.wordIndex ?? 0
-                    ),
-                  })
-                }
-                className="px-2.5 py-1 text-xs sm:text-sm font-semibold text-text bg-surface border border-border-light rounded-lg hover:border-accent hover:bg-accent-bg cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                {token.raw}
-              </button>
-            );
-          })}
+          <button
+            type="button"
+            onClick={handlePlayPhrase}
+            title={`Escuchar frase completa (${TTS_SPEEDS[speed].label})`}
+            className={`inline-flex items-center justify-center ml-2 w-6 h-6 text-[10px] border rounded-full align-middle shrink-0 transition-all cursor-pointer ${
+              playing
+                ? 'bg-accent text-white border-accent'
+                : 'bg-white text-text-muted border-border-light hover:bg-surface hover:border-accent'
+            }`}
+          >
+            {playing ? '■' : '▶'}
+          </button>
+        </div>
+      ) : (
+        <div className="inline-flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={handlePlayPhrase}
+            className={`inline text-left bg-transparent border-none p-0 cursor-pointer hover:text-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${phraseClassName}`}
+            title={`Escuchar a velocidad ${TTS_SPEEDS[speed].label.toLowerCase()}`}
+          >
+            {text}
+          </button>
+          <button
+            type="button"
+            onClick={handlePlayPhrase}
+            title={`Escuchar (${TTS_SPEEDS[speed].label})`}
+            className={`inline-flex items-center justify-center w-5 h-5 text-[9px] border rounded-full shrink-0 transition-all cursor-pointer ${
+              playing
+                ? 'bg-accent text-white border-accent'
+                : 'bg-white text-text-muted border-border-light hover:bg-surface hover:border-accent'
+            }`}
+          >
+            {playing ? '■' : '▶'}
+          </button>
         </div>
       )}
 
-      {guideVisible && activeGuide && (
-        <div className="mt-3 border-l-2 border-accent pl-3 text-left">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[11px] font-black uppercase tracking-wider text-text-muted">
-              {activeGuide.kind === 'phrase' ? 'Frase' : 'Palabra'}
-            </span>
-            <span className="text-sm font-bold text-text">{activeGuide.text}</span>
-          </div>
+      {/* Phonetic guide — Spanish approximation (Kensington system) */}
+      {showPhonetics && (
+        <div className="mt-1.5 pl-3 border-l-2 border-emerald-200">
+          <p className="text-sm text-emerald-700 italic leading-relaxed font-sans">
+            {pronunciation}
+          </p>
+        </div>
+      )}
 
-          {activeGuide.pronunciation && (
-            <code className="inline-block mt-1 text-sm font-mono text-text bg-surface px-2 py-1 rounded-md">
-              {activeGuide.pronunciation}
-            </code>
-          )}
+      {/* Stress pattern */}
+      {showGuide && showPronunciationGuide && stress && (
+        <div className="mt-1 pl-3 border-l-2 border-border-light">
+          <p className="text-xs text-text-muted font-sans">
+            <span className="font-bold uppercase tracking-wider text-[10px]">Acento: </span>
+            <span className="font-bold text-text">{stress}</span>
+          </p>
+        </div>
+      )}
 
-          {activeGuide.kind === 'phrase' && stress && (
-            <p className="mt-1 mb-0 text-xs font-bold text-text-muted">
-              Acento: <span className="text-text">{stress}</span>
-            </p>
-          )}
-
-          {activeGuide.kind === 'phrase' && note && (
-            <p className="mt-1 mb-0 text-sm text-text-muted leading-relaxed">
-              {note}
-            </p>
-          )}
+      {/* Pronunciation note */}
+      {showGuide && showPronunciationGuide && note && (
+        <div className="mt-1 pl-3 border-l-2 border-amber-200">
+          <p className="text-xs text-text-muted font-sans leading-relaxed">{note}</p>
         </div>
       )}
     </div>
